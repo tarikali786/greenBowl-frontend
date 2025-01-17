@@ -2,10 +2,14 @@ import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { SkeletonLoading } from "../../Common";
 import DressingIocn from "../../../assets/icon/dress.png";
 import { useSaladContext } from "../../SaladContextApi/SaladContext";
 export const Dressing = () => {
   const { state, dispatch } = useSaladContext();
+  const [loading, setIsLoading] = useState(true);
+
   const handleDressingSelection = (id) => {
     if (state.createRecipe[2].dressing.find((item) => item.id === id)) {
       dispatch({
@@ -46,11 +50,14 @@ export const Dressing = () => {
               onClick={() => handleDressingSelection(item.id)}
             >
               <div className="w-full  h-[22vh]  md:h-[26vh] lg:h-[28vh] xl:h-[32vh] rounded-lg shadow-xl overflow-hidden">
+                {loading && <SkeletonLoading />}
+
                 <img
                   src={item.img}
                   alt=""
                   loading="lazy"
                   className="object-cover"
+                  onLoad={() => setIsLoading(false)}
                 />
               </div>
               <div className="flex items-center justify-between my-2">

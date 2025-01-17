@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 import { ExploreSaladData } from "../Data/data";
+import { SkeletonLoading } from "../Common";
+import { useState } from "react";
+
 export const ExploreSalad = () => {
+  const [loading, setIsLoading] = useState(true);
+
   return (
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 bg-white-500 ">
       <div className="flex justify-between items-center">
@@ -20,11 +25,14 @@ export const ExploreSalad = () => {
               className="flex flex-col items-center justify-center gap-2"
             >
               <div className="border-4 border-red-500 size-24 sm:size-28 md:size-36 rounded-full overflow-hidden">
+                {loading && <SkeletonLoading />}
+
                 <img
                   src={item.img}
                   alt="Country"
                   loading="lazy"
                   className="object-cover transition-transform duration-500 ease-in-out hover:scale-150"
+                  onLoad={() => setIsLoading(false)}
                 />
               </div>
 

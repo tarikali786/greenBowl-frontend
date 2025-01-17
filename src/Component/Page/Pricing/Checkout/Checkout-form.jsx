@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Link } from "react-router-dom";
-import { Status } from "../../../Model";
-
+import { toast } from "react-toastify";
 export const CheckoutForm = ({ paymentIntentId }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("");
-  const [status, setStatus] = useState("");
   const stripe = useStripe();
   const elements = useElements();
 
@@ -32,34 +30,20 @@ export const CheckoutForm = ({ paymentIntentId }) => {
       );
 
       if (error) {
-        setPaymentStatus(`Payment failed: ${error.message}`);
-        setStatus("fail");
+        toast.error(`Payment failed: ${error.message}`);
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        setPaymentStatus("Payment successful!");
-        setStatus("success");
+        toast.success("Payment successful!");
         console.log("PaymentIntent:", paymentIntent);
       }
     } catch (err) {
-      setPaymentStatus(`Error: ${err.message}`);
+      toast.error(`Error: ${err.message}`);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const handleHideStatus = () => {
-    setStatus("");
-    setPaymentStatus("");
-  };
   return (
     <>
-      {paymentStatus && (
-        <Status
-          status={status}
-          message={paymentStatus}
-          onClick={handleHideStatus}
-        />
-      )}
-
       <form onSubmit={handleSubmit} className=" ">
         <div className="mt-4">
           <label
@@ -101,15 +85,13 @@ export const CheckoutForm = ({ paymentIntentId }) => {
           <Link to="/subscription" className="text-blue-500 cursor-pointer">
             Return to information
           </Link>
-          {status !== "success" && (
-            <button
-              type="submit"
-              disabled={isProcessing || !stripe}
-              className=" bg-green-600 text-white-500 bg-blue-700 font-semibold py-3 px-4 rounded-md hover:bg-yellow-500 transition disabled:opacity-50"
-            >
-              {isProcessing ? "Processing..." : "Sign up now"}
-            </button>
-          )}
+          <button
+            type="submit"
+            disabled={isProcessing || !stripe}
+            className=" bg-green-600 text-white-500 bg-blue-700 font-semibold py-3 px-4 rounded-md hover:bg-yellow-500 transition disabled:opacity-50"
+          >
+            {isProcessing ? "Processing..." : "Sign up now"}
+          </button>
         </div>
 
         {paymentStatus && (

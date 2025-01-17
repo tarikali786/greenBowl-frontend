@@ -2,7 +2,12 @@ import { Link } from "react-router-dom";
 import { PopularSaladData } from "../Data/data";
 import StarsRoundedIcon from "@mui/icons-material/StarsRounded";
 import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
+import { SkeletonLoading } from "../Common";
+import { useState } from "react";
+
 export const PopuralSalad = () => {
+  const [loading, setIsLoading] = useState(true);
+
   return (
     <div className="px-4 md:px-14 lg:px-34 xl:px-44 py-6 ">
       <div className="flex justify-between items-center">
@@ -21,11 +26,14 @@ export const PopuralSalad = () => {
               className="flex flex-col items-left justify-left gap-2"
             >
               <div className=" w-full h-[22vh]  md:h-[26vh] lg:h-[28vh] xl:h-[32vh] rounded-lg shadow-xl overflow-hidden">
+                {loading && <SkeletonLoading />}
+
                 <img
                   src={item.img}
                   alt="Country"
                   loading="lazy"
                   className="object-cover transition-transform duration-500 ease-in-out hover:scale-150"
+                  onLoad={() => setIsLoading(false)}
                 />
               </div>
 

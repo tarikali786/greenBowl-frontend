@@ -11,8 +11,8 @@ export const Tab = memo(({ tabvalue, settabValue, checkInfo }) => {
         onClick={() => handleTabChange("1")}
         className={`relative w-1/2 text-white-500 gap-2 hover:text-white-500  flex justify-center items-center   p-3  cursor-pointer ${
           tabvalue === "1"
-            ? "bg-blue-500  hover:bg-red-500 text-white-500"
-            : "hover:bg-red-500 "
+            ? "bg-blue-500  hover:bg-blue-500 text-white-500"
+            : "hover:bg-blue-500 "
         }`}
       >
         <p className=" ">1 Imformation</p>
@@ -26,8 +26,8 @@ export const Tab = memo(({ tabvalue, settabValue, checkInfo }) => {
           checkInfo ? "hover:text-white-500 " : "cursor-not-allowed"
         }  flex justify-center items-center  p-3  cursor-pointer ${
           tabvalue === "2"
-            ? "bg-blue-500  hover:bg-red-500 text-white-500"
-            : checkInfo && "hover:bg-red-500 "
+            ? "bg-blue-500  hover:bg-blue-500 text-white-500"
+            : checkInfo && "hover:bg-blue-500 "
         }`}
       >
         <p>2 Payment</p>

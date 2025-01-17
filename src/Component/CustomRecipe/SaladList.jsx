@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { SkeletonLoading } from "../Common";
 import { useSaladContext } from "../SaladContextApi/SaladContext";
 export const SaladList = () => {
   const [showCard, setShowCard] = React.useState(true);
   const { state, dispatch } = useSaladContext();
   const [recipeName, setRecipeName] = useState("");
+  const [loading, setIsLoading] = useState(true);
 
   React.useEffect(() => {
     const hasData = state.createRecipe.some(
@@ -32,7 +34,6 @@ export const SaladList = () => {
   const handleSaveRecipe = () => {
     const updatedCreateRecipe = [...state.createRecipe];
     updatedCreateRecipe[5].recipeName = recipeName;
-
 
     dispatch({
       type: "SAVE_RECIPE",
@@ -109,10 +110,13 @@ export const SaladList = () => {
             }
           >
             <div className="w-auto h-12">
+              {loading && <SkeletonLoading />}
+
               <img
                 src={`${import.meta.env.VITE_IMAGE_URL}/${item.img}`}
                 alt=""
                 className="object-cover rounded-md"
+                onLoad={() => setIsLoading(false)}
               />
             </div>
             <p className="flex justify-between gap-2 mt-1">

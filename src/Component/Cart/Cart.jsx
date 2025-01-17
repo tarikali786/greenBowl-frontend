@@ -109,7 +109,7 @@ export const Cart = () => {
             <div className="flex gap-6 mt-5">
               <Link
                 to="/order"
-                className="text-sm bg-red-500 py-2 text-center px-4 rounded-md text-white-500"
+                className="text-sm bg-green-500 py-2 text-center px-4 rounded-md text-white-500"
                 onClick={() =>
                   handlePriceForOrder(
                     calculateTotalPrice(recipe),

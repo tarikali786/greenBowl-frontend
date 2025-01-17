@@ -3,12 +3,13 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import ToppingIocn from "../../../assets/icon/top.png";
 import { Link } from "react-router-dom";
-
-import "swiper/swiper-bundle.css";
+import { useState } from "react";
+import { SkeletonLoading } from "../../Common";
 import { useSaladContext } from "../../SaladContextApi/SaladContext";
 
 export const Topping = () => {
   const { state, dispatch } = useSaladContext();
+  const [loading, setIsLoading] = useState(true);
 
   const handletToppingDataSelection = (id) => {
     if (state.createRecipe[1].toppings.find((i) => i.id === id)) {
@@ -46,11 +47,14 @@ export const Topping = () => {
               onClick={() => handletToppingDataSelection(item.id)}
             >
               <div className="w-full  h-[22vh]  md:h-[26vh] lg:h-[28vh] xl:h-[32vh] rounded-lg shadow-xl overflow-hidden">
+                {loading && <SkeletonLoading />}
+
                 <img
                   src={item.img}
                   alt=""
                   loading="lazy"
                   className="object-cover"
+                  onLoad={() => setIsLoading(false)}
                 />
               </div>
               <div className="flex items-center justify-between my-2">

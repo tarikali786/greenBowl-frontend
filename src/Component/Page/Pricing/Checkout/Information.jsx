@@ -1,19 +1,16 @@
-import React, { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import "./style.css";
 import { Autocomplete } from "@mui/material";
 import axios from "axios";
-import { Status } from "../../../Model";
+import { toast } from "react-toastify";
 import { useSaladContext } from "../../../SaladContextApi";
 
 export const Information = memo(
   ({ settabValue, setCheckInfo, setPaymentIntentid }) => {
-    const [countries, setCountries] = useState([]);
     const [loading, setLoading] = useState(false);
     const [states, setStates] = useState([]);
-    const [error, setError] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState("India");
     const { price } = useSaladContext();
 
     const [userInfo, setUserInfo] = useState({
@@ -35,6 +32,7 @@ export const Information = memo(
         userInfo.fname !== "" &&
         userInfo.lname !== "" &&
         userInfo.phone !== "" &&
+        userInfo.district !== "" &&
         userInfo.street_address !== "" &&
         userInfo.country !== "" &&
         userInfo.pin_code !== "" &&
@@ -73,8 +71,6 @@ export const Information = memo(
       fetchCountryData();
     }, []);
 
-    // console.log(userInfo);
-
     const handleOnchange = (e) => {
       setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
     };
@@ -108,22 +104,15 @@ export const Information = memo(
       const headers = {
         "Content-Type": "application/json",
       };
-      console.log(data);
 
       try {
         const response = await axios.post(api, data, { headers });
         setPaymentIntentid(response.data.payment_intent_id);
+
         settabValue("2");
-        setError("");
+        toast.success(`Payment Information successfull`);
       } catch (error) {
-        setError(
-          error.response?.data?.error ||
-            "Failed to create payment intent. Please try again."
-        );
-        console.error(
-          "Error creating payment intent:",
-          error.response?.data || error.message
-        );
+        toast.error("Failed to create payment intent. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -136,20 +125,9 @@ export const Information = memo(
       createPaymentIntent();
     };
 
-    const handleHideStatus = () => {
-      setError("");
-    };
-
     return (
       <div className="mt-5 border p-4 rounded-lg bg-blue-100">
         <>
-          {error && (
-            <Status
-              message={error}
-              status={"fail"}
-              onClick={handleHideStatus}
-            />
-          )}
           <p className="text-2xl text-black-400">Information</p>
           <p className="text-sm text-black-300 mt-1">
             Already have an account with us?

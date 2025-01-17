@@ -3,11 +3,13 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import veg from "../../../assets/icon/veg.png";
 import { Link } from "react-router-dom";
-
+import { useState } from "react";
+import { SkeletonLoading } from "../../Common";
 import { useSaladContext } from "../../SaladContextApi/SaladContext";
 
 export const Vegetables = () => {
   const { state, dispatch } = useSaladContext();
+  const [loading, setIsLoading] = useState(true);
 
   const handleVegetableSelection = (id) => {
     if (state.createRecipe[4].vegetables.some((item) => item.id === id)) {
@@ -48,11 +50,14 @@ export const Vegetables = () => {
               onClick={() => handleVegetableSelection(item.id)}
             >
               <div className="w-full  h-[22vh]  md:h-[26vh] lg:h-[28vh] xl:h-[32vh] rounded-lg shadow-xl overflow-hidden">
+                {loading && <SkeletonLoading />}
+
                 <img
                   src={item.img}
                   alt=""
                   loading="lazy"
                   className="object-cover"
+                  onLoad={() => setIsLoading(false)}
                 />
               </div>
               <div className="flex items-center justify-between my-2">

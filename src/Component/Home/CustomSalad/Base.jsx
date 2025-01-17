@@ -3,9 +3,13 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import FilterNoneRoundedIcon from "@mui/icons-material/FilterNoneRounded";
 import { useSaladContext } from "../../SaladContextApi/SaladContext";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { SkeletonLoading } from "../../Common";
+
 export const Base = () => {
   const { state, dispatch } = useSaladContext();
+  const [loading, setIsLoading] = useState(true);
 
   const handleBaseSelection = (id) => {
     if (state.createRecipe[0].base.find((i) => i.id === id)) {
@@ -27,9 +31,7 @@ export const Base = () => {
         <h3 className="text-2xl font-semibold text-black-600">
           <FilterNoneRoundedIcon className="text-green-500" /> Base
         </h3>
-        <Link
-          className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl"
-        >
+        <Link className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl">
           More
         </Link>
       </div>
@@ -46,11 +48,14 @@ export const Base = () => {
               onClick={() => handleBaseSelection(item.id)}
             >
               <div className="w-full  h-[22vh]  md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
+                {loading && <SkeletonLoading />}
+
                 <img
                   src={item.img}
                   alt=""
                   loading="lazy"
                   className="object-cover"
+                  onLoad={() => setIsLoading(false)}
                 />
               </div>
               <div className="flex items-center justify-between my-2">
