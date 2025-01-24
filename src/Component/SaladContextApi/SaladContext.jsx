@@ -13,10 +13,10 @@ const SaladContext = createContext();
 // Initial State
 const initialState = {
   base: CustomBaseData || [],
-  toppings: CustomToppingsData || [],
+  topping: CustomToppingsData || [],
   dressing: CustomDressingsData || [],
-  vegetables: CustomVegetablesdata || [],
-  extras: CustomExtrasData || [],
+  vegetable: CustomVegetablesdata || [],
+  extra: CustomExtrasData || [],
   recipe: [],
   cart: [],
   orderPrice: {
@@ -25,10 +25,10 @@ const initialState = {
   },
   createRecipe: [
     { base: [] },
-    { toppings: [] },
+    { topping: [] },
     { dressing: [] },
     { extra: [] },
-    { vegetables: [] },
+    { vegetable: [] },
     { recipeName: "" },
   ],
 };
@@ -38,103 +38,43 @@ const saladReducer = (state, action) => {
   switch (action.type) {
     case "CREATE_RECIPE": {
       const typeKey = action.payload.type.toLowerCase();
-
+      const data = action.payload.data;
       return {
         ...state,
         createRecipe: state.createRecipe.map((section) =>
           section[typeKey]
             ? {
                 ...section,
-                [typeKey]: [...section[typeKey], action.payload.data],
+                [typeKey]: [...section[typeKey], data],
               }
             : section
         ),
       };
     }
 
-    case "REMOVE_BASE": {
+    case "REMOVE_ITEM_FROM_RECIPE": {
+      const typeKey = action.payload.type.toLowerCase();
+      const id = action.payload.id;
       return {
         ...state,
         createRecipe: state.createRecipe.map((section) =>
-          section.base
+          section[typeKey]
             ? {
                 ...section,
-                base: section.base.filter((item) => item.id !== action.payload),
+                [typeKey]: section[typeKey].filter((item) => item.id !== id),
               }
             : section
         ),
       };
     }
-
-    case "REMOVE_VEGETABLE": {
-      return {
-        ...state,
-        createRecipe: state.createRecipe.map((section) =>
-          section.vegetables
-            ? {
-                ...section,
-                vegetables: section.vegetables.filter(
-                  (item) => item.id !== action.payload
-                ),
-              }
-            : section
-        ),
-      };
-    }
-
-    case "REMOVE_EXTRA": {
-      return {
-        ...state,
-        createRecipe: state.createRecipe.map((section) =>
-          section.extra
-            ? {
-                ...section,
-                extra: section.extra.filter(
-                  (item) => item.id !== action.payload
-                ),
-              }
-            : section
-        ),
-      };
-    }
-
-    case "REMOVE_DRESSING":
-      return {
-        ...state,
-        createRecipe: state.createRecipe.map((section) =>
-          section.dressing
-            ? {
-                ...section,
-                dressing: section.dressing.filter(
-                  (item) => item.id !== action.payload
-                ),
-              }
-            : section
-        ),
-      };
-
-    case "REMOVE_TOPPING":
-      return {
-        ...state,
-        createRecipe: state.createRecipe.map((section) =>
-          section.toppings
-            ? {
-                ...section,
-                toppings: section.toppings.filter(
-                  (item) => item.id !== action.payload
-                ),
-              }
-            : section
-        ),
-      };
 
     case "SAVE_RECIPE": {
       const initialCreateRecipe = [
         { base: [] },
-        { toppings: [] },
+        { topping: [] },
         { dressing: [] },
         { extra: [] },
-        { vegetables: [] },
+        { vegetable: [] },
         { recipeName: "" },
       ];
       const UpdateRecipe = {

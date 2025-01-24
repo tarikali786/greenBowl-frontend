@@ -57,7 +57,7 @@ import Veg10 from "../../assets/Home/Vegitable/Cauliflower.jpg";
 import Veg11 from "../../assets/Home/Vegitable/Squash-Zucchini.jpg";
 import Veg12 from "../../assets/Home/Vegitable/PhotoRoom_20210703_130108.webp";
 import Veg13 from "../../assets/Home/Vegitable/images (7).jpg";
-import Veg14 from "../../assets/Home/Vegitable/green-beans-732x549-thumbnail.avif";
+import Veg14 from "../../assets/Home/Vegitable/green-beans-732x549-thumbnail.png";
 import Veg15 from "../../assets/Home/Vegitable/images (8).jpg";
 import Veg16 from "../../assets/Home/Vegitable/istockphoto-104822169-612x612.jpg";
 import Veg17 from "../../assets/Home/Vegitable/red-cabbage-isolated-white-background-ai-generated-image-319116587.webp";
@@ -349,7 +349,7 @@ export const CustomVegetablesdata = [
   {
     id: 46,
     img: Veg1,
-    title: "BB",
+    title: "cucumber",
     calories: "16 kcal per 100g",
     weight: "100g",
     description:

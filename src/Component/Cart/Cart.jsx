@@ -1,4 +1,3 @@
-import React from "react";
 import { useSaladContext } from "../SaladContextApi/SaladContext";
 import { Link } from "react-router-dom";
 export const Cart = () => {
@@ -6,7 +5,7 @@ export const Cart = () => {
 
   // Function to calculate the total price of a recipe
   const calculateTotalPrice = (recipe) => {
-    const categories = ["base", "toppings", "dressing", "extra", "vegetables"];
+    const categories = ["base", "topping", "dressing", "extra", "vegetable"];
     return categories.reduce((total, category, index) => {
       if (recipe[index]?.[category]?.length > 0) {
         total += recipe[index][category].reduce(
@@ -19,7 +18,7 @@ export const Cart = () => {
   };
   // Function to calculate the total calories of a recipe
   const calculateTotalCalories = (recipe) => {
-    const categories = ["base", "toppings", "dressing", "extra", "vegetables"];
+    const categories = ["base", "topping", "dressing", "extra", "vegetable"];
     return categories.reduce((total, category, index) => {
       if (recipe[index]?.[category]?.length > 0) {
         total += recipe[index][category].reduce(
@@ -67,7 +66,7 @@ export const Cart = () => {
           key={recipeIndex}
         >
           <div className="w-60 h-40 border flex flex-wrap justify-start overflow-y-auto rounded">
-            {["base", "toppings", "dressing", "extra", "vegetables"].map(
+            {["base", "topping", "dressing", "extra", "vegetable"].map(
               (category, index) =>
                 recipe[index]?.[category]?.length > 0 &&
                 recipe[index]?.[category].map((item) => (
@@ -87,7 +86,7 @@ export const Cart = () => {
             </h1>
 
             <div className="flex gap-1">
-              {["base", "toppings", "dressing", "extra", "vegetables"].map(
+              {["base", "topping", "dressing", "extra", "vegetable"].map(
                 (category, categoryIndex) =>
                   recipe[categoryIndex]?.[category]?.length > 0 &&
                   recipe[categoryIndex]?.[category].map((item, itemIndex) => (

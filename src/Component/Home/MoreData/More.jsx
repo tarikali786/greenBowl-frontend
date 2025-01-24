@@ -1,58 +1,70 @@
 import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { SkeletonLoading } from "../../Common";
-import DressingIocn from "../../../assets/icon/dress.png";
+import FilterNoneRoundedIcon from "@mui/icons-material/FilterNoneRounded";
 import { useSaladContext } from "../../SaladContextApi/SaladContext";
-export const Dressing = () => {
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { SkeletonLoading } from "../../Common";
+
+export const More = () => {
   const { state, dispatch } = useSaladContext();
   const [loading, setIsLoading] = useState(true);
+  const [count, setCount] = useState(0);
+  const { salad } = useParams();
+  const dynamicSalad = state[salad];
 
-  const handleDressingSelection = (id) => {
-    if (state.createRecipe[2].dressing.find((item) => item.id === id)) {
-      dispatch({
-        type: "REMOVE_DRESSING",
-        payload: id,
-      });
+  useEffect(() => {
+    if (salad == "base") {
+      setCount(0);
+    } else if (salad == "topping") {
+      setCount(1);
+    } else if (salad == "dressing") {
+      setCount(2);
+    } else if (salad == "extra") {
+      setCount(3);
+    } else if (salad == "vegetable") {
+      setCount(4);
+    }
+  }, [salad]);
+  const dynamicCreateRecipe = state.createRecipe[count][salad];
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  const handleBaseSelection = (id) => {
+    if (dynamicCreateRecipe.find((i) => i.id === id)) {
+      dispatch({ type: "REMOVE_BASE", payload: id });
     } else {
-      const DressingData = state.dressing.find((i) => i.id === id);
-      dispatch({
-        type: "CREATE_RECIPE",
-        payload: { type: "DRESSING", data: DressingData },
-      });
+      const Objectdata = dynamicSalad.find((i) => i.id === id);
+      if (Objectdata) {
+        dispatch({
+          type: "CREATE_RECIPE",
+          payload: { data: Objectdata, type: salad.toUpperCase() },
+        });
+      }
     }
   };
+
   return (
-    <div className="my-8">
+    <div className="px-4 md:px-14 lg:px-24 xl:px-44 my-8">
       <div className="flex justify-between items-center">
-        <h3 className=" flex items-center gap-2 text-2xl font-semibold text-black-600">
-          {" "}
-          <div className="size-10">
-            <img src={DressingIocn} alt="" />
-          </div>{" "}
-          <p>Dressing</p>
+        <h3 className="text-2xl font-semibold text-black-600">
+          {salad.toUpperCase()}
         </h3>
-        <Link
-          to="/recepi/dressing"
-          className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl"
-        >
-          More
-        </Link>
       </div>
       <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {state?.dressing?.slice(0, 4).map((item) => (
+        {dynamicSalad?.map((item) => (
           <div className="mt-8" key={item.id}>
             <div
-              className={` cursor-pointer rounded-lg shadow-lg  p-4  ${
-                state.createRecipe[2].dressing.some((i) => i.id === item.id) &&
-                "border-4 border-green-500"
+              className={`cursor-pointer rounded-lg shadow-lg  p-4 ${
+                dynamicCreateRecipe?.some((i) => i.id === item.id)
+                  ? "border-4 border-green-500"
+                  : ""
               }`}
               key={item.id}
-              onClick={() => handleDressingSelection(item.id)}
+              onClick={() => handleBaseSelection(item.id)}
             >
-              <div className="w-full  h-[22vh]  md:h-[26vh] lg:h-[28vh] xl:h-[32vh] rounded-lg shadow-xl overflow-hidden">
+              <div className="w-full  h-[22vh]  md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
                 {loading && <SkeletonLoading />}
 
                 <img

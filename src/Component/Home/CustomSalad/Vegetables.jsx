@@ -12,14 +12,14 @@ export const Vegetables = () => {
   const [loading, setIsLoading] = useState(true);
 
   const handleVegetableSelection = (id) => {
-    if (state.createRecipe[4].vegetables.some((item) => item.id === id)) {
+    if (state.createRecipe[4].vegetable.some((item) => item.id === id)) {
       dispatch({ type: "REMOVE_VEGETABLE", payload: id });
     } else {
-      const VegetableData = state.vegetables.find((item) => item.id === id);
+      const VegetableData = state.vegetable.find((item) => item.id === id);
       if (VegetableData) {
         dispatch({
           type: "CREATE_RECIPE",
-          payload: { type: "VEGETABLES", data: VegetableData },
+          payload: { type: "VEGETABLE", data: VegetableData },
         });
       }
     }
@@ -32,18 +32,18 @@ export const Vegetables = () => {
           <div className="size-10">
             <img src={veg} alt="" />
           </div>
-          Vegetables
+          Vegetable
         </h3>
-        <Link className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl">
+        <Link to="/recepi/vegetable"  className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl">
           More
         </Link>
       </div>
       <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {state?.vegetables.slice(0, 4).map((item) => (
+        {state?.vegetable.slice(0, 4).map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`cursor-pointer shadow-lg p-4 rounded-lg ${
-                state.createRecipe[4].vegetables.some((i) => i.id === item.id)
+                state.createRecipe[4].vegetable.some((i) => i.id === item.id)
                   ? "border-4 border-green-500"
                   : ""
               }`}

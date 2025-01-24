@@ -16,7 +16,7 @@ export const Extra = () => {
     if (state.createRecipe[3].extra.find((item) => item.id === id)) {
       dispatch({ type: "REMOVE_EXTRA", payload: id });
     } else {
-      const extraData = state.extras.find((i) => i.id === id);
+      const extraData = state.extra.find((i) => i.id === id);
       dispatch({
         type: "CREATE_RECIPE",
         payload: { type: "EXTRA", data: extraData },
@@ -30,12 +30,15 @@ export const Extra = () => {
           {" "}
           <MoreHorizRoundedIcon className="text-green-500" /> Extra
         </h3>
-        <Link className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl">
+        <Link
+          to="/recepi/extra"
+          className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl"
+        >
           More
         </Link>
       </div>
       <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6  ">
-        {state.extras.slice(0, 4).map((item) => (
+        {state.extra.slice(0, 4).map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`cursor-pointer rounded-lg shadow-lg  p-4 ${

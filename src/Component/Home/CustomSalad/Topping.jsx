@@ -12,13 +12,13 @@ export const Topping = () => {
   const [loading, setIsLoading] = useState(true);
 
   const handletToppingDataSelection = (id) => {
-    if (state.createRecipe[1].toppings.find((i) => i.id === id)) {
+    if (state.createRecipe[1].topping.find((i) => i.id === id)) {
       dispatch({ type: "REMOVE_TOPPING", payload: id });
     } else {
-      const ToppingData = state.toppings.find((i) => i.id === id);
+      const ToppingData = state.topping.find((i) => i.id === id);
       dispatch({
         type: "CREATE_RECIPE",
-        payload: { type: "TOPPINGS", data: ToppingData },
+        payload: { type: "TOPPING", data: ToppingData },
       });
     }
   };
@@ -32,16 +32,16 @@ export const Topping = () => {
           </div>{" "}
           Topping
         </h3>
-        <Link className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl">
+        <Link to="/recepi/topping"  className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl">
           More
         </Link>
       </div>
       <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {state?.toppings.slice(0, 4)?.map((item) => (
+        {state?.topping.slice(0, 4)?.map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`cursor-pointer rounded-lg shadow-lg  p-4 ${
-                state.createRecipe[1].toppings.some((i) => i.id === item.id) &&
+                state.createRecipe[1].topping.some((i) => i.id === item.id) &&
                 "border-4 border-green-500"
               }`}
               onClick={() => handletToppingDataSelection(item.id)}

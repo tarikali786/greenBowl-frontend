@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import { Cart, Home, HomeLayout, PriceCart, Recipe } from "./Component";
+import { Cart, Home, HomeLayout, More, PriceCart, Recipe } from "./Component";
 import { ToastContainer } from "react-toastify";
 
 function App() {
@@ -12,6 +12,7 @@ function App() {
           <Route path="recipe-list" element={<Recipe />} />
           <Route path="cart" element={<Cart />} />
           <Route path="order" element={<PriceCart />} />
+          <Route path="recepi/:salad" element={<More />} />
         </Route>
       </Routes>
       <ToastContainer

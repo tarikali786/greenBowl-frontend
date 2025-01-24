@@ -12,10 +12,10 @@ export const SaladList = () => {
     const hasData = state.createRecipe.some(
       (section) =>
         (section.base && section.base.length > 0) ||
-        (section.toppings && section.toppings.length > 0) ||
+        (section.topping && section.topping.length > 0) ||
         (section.dressing && section.dressing.length > 0) ||
-        (section.vegetables && section.vegetables.length > 0) ||
-        (section.extras && section.extras.length > 0)
+        (section.vegetable && section.vegetable.length > 0) ||
+        (section.extra && section.extra.length > 0)
     );
     setShowCard(hasData);
   }, [state.createRecipe]);
@@ -79,11 +79,17 @@ export const SaladList = () => {
         />
       </div>
       <div className="grid grid-cols-3  gap-3 mt-4 max-h-[30vh] overflow-y-auto">
+        
         {state?.createRecipe[0]?.base?.map((item, index) => (
           <div
             className=" shadow-lg px-1 cursor-pointer"
             key={index}
-            onClick={() => dispatch({ type: "REMOVE_BASE", payload: item.id })}
+            onClick={() =>
+              dispatch({
+                type: "REMOVE_ITEM_FROM_RECIPE",
+                payload: { type: "BASE", id: item.id },
+              })
+            }
           >
             <div className="w-auto h-12">
               <img
@@ -101,12 +107,15 @@ export const SaladList = () => {
           </div>
         ))}
 
-        {state?.createRecipe[4]?.vegetables?.map((item, index) => (
+        {state?.createRecipe[4]?.vegetable?.map((item, index) => (
           <div
             className="shadow-lg px-1  cursor-pointer"
             key={index}
             onClick={() =>
-              dispatch({ type: "REMOVE_VEGETABLE", payload: item.id })
+              dispatch({
+                type: "REMOVE_ITEM_FROM_RECIPE",
+                payload: { type: "VEGETABLE", id: item.id },
+              })
             }
           >
             <div className="w-auto h-12">
@@ -127,12 +136,15 @@ export const SaladList = () => {
             </p>
           </div>
         ))}
-        {state?.createRecipe[1]?.toppings?.map((item, index) => (
+        {state?.createRecipe[1]?.topping?.map((item, index) => (
           <div
             className="shadow-lg px-1  cursor-pointer"
             key={index}
             onClick={() =>
-              dispatch({ type: "REMOVE_TOPPING", payload: item.id })
+              dispatch({
+                type: "REMOVE_ITEM_FROM_RECIPE",
+                payload: { type: "TOPPING", id: item.id },
+              })
             }
           >
             <div className="w-auto h-12">
@@ -155,7 +167,10 @@ export const SaladList = () => {
             className="shadow-lg px-1  cursor-pointer"
             key={index}
             onClick={() =>
-              dispatch({ type: "REMOVE_DRESSING", payload: item.id })
+              dispatch({
+                type: "REMOVE_ITEM_FROM_RECIPE",
+                payload: { type: "DRESSING", id: item.id },
+              })
             }
           >
             <div className="w-auto h-12">
@@ -177,7 +192,12 @@ export const SaladList = () => {
           <div
             className="shadow-lg px-1  cursor-pointer"
             key={index}
-            onClick={() => dispatch({ type: "REMOVE_EXTRA", payload: item.id })}
+            onClick={() =>
+              dispatch({
+                type: "REMOVE_ITEM_FROM_RECIPE",
+                payload: { type: "EXTRA", id: item.id },
+              })
+            }
           >
             <div className="w-auto h-12">
               <img
@@ -197,10 +217,6 @@ export const SaladList = () => {
       </div>
 
       <div className="mt-3 mb-2 flex gap-2  justify-between">
-        {/* <button className="text-sm bg-red-500 py-2 text-center px-4 rounded-md text-white-500 " >
-          Add To Cart
-        </button> */}
-
         <button
           className="text-sm bg-green-600 py-2 text-center px-4 rounded-md text-white-500"
           onClick={handleSaveRecipe}

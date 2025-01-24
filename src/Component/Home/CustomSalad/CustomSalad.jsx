@@ -3,8 +3,12 @@ import { Vegetables } from "./Vegetables";
 import { Topping } from "./Topping";
 import { Dressing } from "./Dressing";
 import { Extra } from "./Extra";
+import { useEffect } from "react";
 
 export const CustomSalad = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className=" px-4 md:px-14 lg:px-24 xl:px-44">
       <div className="text-center mb-8">
