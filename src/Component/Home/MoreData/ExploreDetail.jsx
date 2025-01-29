@@ -5,37 +5,30 @@ import { useSaladContext } from "../../SaladContextApi/SaladContext";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SkeletonLoading } from "../../Common";
-
-export const More = () => {
+import { ExploreSaladData, PopularSaladData } from "../../Data/data";
+import StarsIcon from "@mui/icons-material/Stars";
+export const ExploreDetail = () => {
   const { state, dispatch } = useSaladContext();
+  const { id } = useParams();
+  const [details, setDetails] = useState([]);
+
+  useEffect(() => {
+    const filterData = ExploreSaladData?.filter((item) => item.id == id);
+    setDetails(filterData[0]);
+  }, [id]);
+
   const [loading, setIsLoading] = useState(true);
   const [count, setCount] = useState(0);
   const { salad } = useParams();
   const dynamicSalad = state[salad];
-
-  useEffect(() => {
-    if (salad == "base") {
-      setCount(0);
-    } else if (salad == "topping") {
-      setCount(1);
-    } else if (salad == "dressing") {
-      setCount(2);
-    } else if (salad == "extra") {
-      setCount(3);
-    } else if (salad == "vegetable") {
-      setCount(4);
-    }
-  }, [salad]);
   const dynamicCreateRecipe = state.createRecipe[count][salad];
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const handleItemSelection = (id) => {
+
+  const handleBaseSelection = (id) => {
     if (dynamicCreateRecipe.find((i) => i.id === id)) {
-      dispatch({
-        type: "REMOVE_ITEM_FROM_RECIPE",
-        payload: { type: salad, id: id },
-      });
+      dispatch({ type: "REMOVE_BASE", payload: id });
     } else {
       const Objectdata = dynamicSalad.find((i) => i.id === id);
       if (Objectdata) {
@@ -46,25 +39,55 @@ export const More = () => {
       }
     }
   };
+  console.log(details);
 
   return (
     <div className="px-4 md:px-14 lg:px-24 xl:px-44 my-8">
-      <div className="flex justify-between items-center">
-        <h3 className="text-2xl font-semibold text-black-600">
-          {salad.toUpperCase()}
-        </h3>
+      <div className="w-full md:h-[50vh] h-[40vh] overflow-hidden rounded-xl">
+        <img
+          src={`${import.meta.env.VITE_IMAGE_URL}/${details.img}`}
+          alt=""
+          className=" object-cover rounded-lg  "
+        />
       </div>
+      <div className="flex justify-between  items-center gap-5 mt-6">
+        <h3 className="text-2xl mt-4 font-semibold text-black-600">
+          {details?.title}
+        </h3>
+
+        <div className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl">
+          Order Now
+        </div>
+      </div>
+
+      <p>
+        {details?.description ||
+          "A yogurt-based salad with fresh vegetables and mustard seeds."}
+      </p>
+      <div className="flex gap-1 mt-2">
+        {Array.from({ length: Math.ceil(details?.rating || 4.6) }, (_, index) => (
+          <StarsIcon key={index} className="text-red-600" />
+        ))}
+        <b>( {details?.rating || 4.6} )</b>
+      </div>
+      <div className="flex gap-10 my-2">
+        <p>
+          price: <b>₹ {details?.price || 220}</b>
+        </p>
+        <p>
+          Calories: <b>{details?.calories}</b>
+        </p>
+      </div>
+
+      <h1 className="text-xl mt-5 font-semibold  text-green-500">
+        Ingredients
+      </h1>
       <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {dynamicSalad?.map((item) => (
-          <div className="mt-8" key={item.id}>
+        {details?.ingredients?.map((item) => (
+          <div className="mt-4" key={item.id}>
             <div
-              className={`cursor-pointer rounded-lg shadow-lg  p-4 ${
-                dynamicCreateRecipe?.some((i) => i.id === item.id)
-                  ? "border-4 border-green-500"
-                  : ""
-              }`}
+              className={` rounded-lg shadow-lg  p-4 `}
               key={item.id}
-              onClick={() => handleItemSelection(item.id)}
             >
               <div className="w-full  h-[22vh]  md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
                 {loading && <SkeletonLoading />}

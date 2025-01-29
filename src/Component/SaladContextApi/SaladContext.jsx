@@ -31,6 +31,8 @@ const initialState = {
     { vegetable: [] },
     { recipeName: "" },
   ],
+
+  searchItem: {},
 };
 
 // Reducer Function
@@ -116,6 +118,7 @@ const saladReducer = (state, action) => {
         },
       };
 
+   
     default:
       return state;
   }

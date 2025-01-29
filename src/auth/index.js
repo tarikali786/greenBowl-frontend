@@ -1,1 +1,2 @@
-export * from "./Google-login";
+export * from "./Login";
+export * from "./Register";

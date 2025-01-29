@@ -12,7 +12,10 @@ export const ExploreSalad = () => {
         <h1 className="text-xl md:text-2xl font-bold">
           Explore Our Most Loved Salads
         </h1>
-        <Link className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl">
+        <Link
+          to="/exploreSalad"
+          className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl"
+        >
           More
         </Link>
       </div>
@@ -21,7 +24,7 @@ export const ExploreSalad = () => {
         {ExploreSaladData.slice(0, 6)?.map((item) => (
           <div className="country-Card" key={item.id}>
             <Link
-              to={"#"}
+              to={`/exploreSalad/${item.id}`}
               className="flex flex-col items-center justify-center gap-2"
             >
               <div className="border-4 border-red-500 size-24 sm:size-28 md:size-36 rounded-full overflow-hidden">

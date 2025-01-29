@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
-import { PopularSaladData } from "../Data/data";
+import { PopularSaladData } from "../../Data/data";
 import StarsRoundedIcon from "@mui/icons-material/StarsRounded";
 import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
-import { SkeletonLoading } from "../Common";
 import { useState } from "react";
-
-export const PopuralSalad = () => {
+import { SkeletonLoading } from "../../Common";
+export const MorePopuralSalad = () => {
   const [loading, setIsLoading] = useState(true);
 
   return (
@@ -14,15 +13,9 @@ export const PopuralSalad = () => {
         <h1 className="text-xl md:text-2xl font-bold">
           Most Popular Salad Picks
         </h1>
-        <Link
-          to="/popuralSalad"
-          className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl"
-        >
-          More
-        </Link>
       </div>
-      <div className="my-8 grid mm:grid-cols-2 lg:grid-cols-4  gap-4 ">
-        {PopularSaladData.slice(0, 4).map((item) => (
+      <div className="my-8 grid mm:grid-cols-2 lg:grid-cols-3  gap-8 ">
+        {PopularSaladData?.map((item) => (
           <div className="country-Card" key={item.id}>
             <Link
               to={`/popuralSalad/${item?.id}`}
@@ -48,11 +41,11 @@ export const PopuralSalad = () => {
                 <WhatshotRoundedIcon className="text-green-600 ml-2" />{" "}
                 {item?.calories}
               </p>
-              <div className="text-sm  text-black-400 flex gap-1  ">
+              <p className="text-sm  text-black-400 flex gap-1  ">
                 {item?.ingredients?.map((ing, index) => (
                   <p key={index}>{ing?.title},</p>
                 ))}
-              </div>
+              </p>
               <p className="text-sm  text-black-200 ">{item.description}</p>
             </Link>
           </div>

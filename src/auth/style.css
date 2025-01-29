@@ -1,0 +1,18 @@
+.login-container {
+  background-image: url('../assets/Home/Green-Papaya-Salad.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.form_section {
+  background-color: transparent;
+  backdrop-filter: blur(55px);
+  background-color: #ffffff10;
+}
+.register-container{
+  background-image: url('../assets/Home/OIG1.XG36U1bA44XETG_j2Svl.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
