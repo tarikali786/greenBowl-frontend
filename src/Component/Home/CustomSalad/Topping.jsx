@@ -13,7 +13,10 @@ export const Topping = () => {
 
   const handletToppingDataSelection = (id) => {
     if (state.createRecipe[1].topping.find((i) => i.id === id)) {
-      dispatch({ type: "REMOVE_TOPPING", payload: id });
+      dispatch({
+        type: "REMOVE_ITEM_FROM_RECIPE",
+        payload: { type: "topping", id: id },
+      });
     } else {
       const ToppingData = state.topping.find((i) => i.id === id);
       dispatch({

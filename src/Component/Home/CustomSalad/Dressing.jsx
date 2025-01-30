@@ -13,8 +13,8 @@ export const Dressing = () => {
   const handleDressingSelection = (id) => {
     if (state.createRecipe[2].dressing.find((item) => item.id === id)) {
       dispatch({
-        type: "REMOVE_DRESSING",
-        payload: id,
+        type: "REMOVE_ITEM_FROM_RECIPE",
+        payload: { type: "dressing", id: id },
       });
     } else {
       const DressingData = state.dressing.find((i) => i.id === id);

@@ -41,6 +41,8 @@ export const Cart = () => {
     });
   };
 
+  console.log(state?.cart);
+
   return (
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 flex flex-col gap-y-4">
       {state?.cart.length === 0 && (
@@ -78,33 +80,64 @@ export const Cart = () => {
                   </div>
                 ))
             )}
+            {recipe.img && (
+              <div className=" shadow-lg" key={recipeIndex}>
+                <img
+                  src={`${import.meta.env.VITE_IMAGE_URL}/${recipe.img}`}
+                  alt={recipe.title}
+                />
+              </div>
+            )}
           </div>
-
           <div>
             <h1 className="text-lg font-semibold text-black-600">
-              {recipe[5]?.recipeName}
+              {recipe[5]?.recipeName || recipe?.title}
             </h1>
 
-            <div className="flex gap-1">
-              {["base", "topping", "dressing", "extra", "vegetable"].map(
-                (category, categoryIndex) =>
-                  recipe[categoryIndex]?.[category]?.length > 0 &&
-                  recipe[categoryIndex]?.[category].map((item, itemIndex) => (
-                    <div key={itemIndex}>
-                      {item.title}
-                      {recipe[categoryIndex]?.[category]?.length > 1 && ","}
-                    </div>
-                  ))
-              )}
-            </div>
+            {recipe?.ingredients ? (
+              <div className="flex gap-1">
+                {recipe?.ingredients.map((ing, index) => (
+                  <div key={index}>
+                    {ing.title}
+                    {recipe?.ingredients?.length > 1 && ","}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex gap-1">
+                {["base", "topping", "dressing", "extra", "vegetable"].map(
+                  (category, categoryIndex) =>
+                    recipe[categoryIndex]?.[category]?.length > 0 &&
+                    recipe[categoryIndex]?.[category].map((item, itemIndex) => (
+                      <div key={itemIndex}>
+                        {item.title}
+                        {recipe[categoryIndex]?.[category]?.length > 1 && ","}
+                      </div>
+                    ))
+                )}
+              </div>
+            )}
 
-            <p className="text-black-600">
-              Total Price: <strong>₹{calculateTotalPrice(recipe)}</strong>
-            </p>
-            <p className="text-black-600">
-              Total Calories:{" "}
-              <strong>{calculateTotalCalories(recipe)} kcal</strong>
-            </p>
+            {recipe.price ? (
+              <p className="text-black-600">
+                Total Price: <strong>₹ {recipe.price}</strong>
+              </p>
+            ) : (
+              <p className="text-black-600">
+                Total Price: <strong>₹{calculateTotalPrice(recipe)}</strong>
+              </p>
+            )}
+
+            {recipe.price ? (
+              <p className="text-black-600">
+                Total Calories: <strong> {recipe?.calories}</strong>
+              </p>
+            ) : (
+              <p className="text-black-600">
+                Total Calories:{" "}
+                <strong>{calculateTotalCalories(recipe)} kcal</strong>
+              </p>
+            )}
             <div className="flex gap-6 mt-5">
               <Link
                 to="/order"

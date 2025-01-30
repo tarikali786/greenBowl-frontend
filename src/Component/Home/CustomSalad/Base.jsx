@@ -13,7 +13,10 @@ export const Base = () => {
 
   const handleBaseSelection = (id) => {
     if (state.createRecipe[0].base.find((i) => i.id === id)) {
-      dispatch({ type: "REMOVE_BASE", payload: id });
+      dispatch({
+        type: "REMOVE_ITEM_FROM_RECIPE",
+        payload: { type: "base", id: id },
+      });
     } else {
       const Objectdata = state.base.find((i) => i.id === id);
       if (Objectdata) {
@@ -31,12 +34,15 @@ export const Base = () => {
         <h3 className="text-2xl font-semibold text-black-600">
           <FilterNoneRoundedIcon className="text-green-500" /> Base
         </h3>
-        <Link to="/recepi/base" className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl">
+        <Link
+          to="/recepi/base"
+          className="text-lg bg-red-500 text-white-500 px-3 py-[6px] rounded-xl"
+        >
           More
         </Link>
       </div>
       <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {state.base.slice(0,4).map((item) => ( 
+        {state.base.slice(0, 4).map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`cursor-pointer rounded-lg shadow-lg  p-4 ${

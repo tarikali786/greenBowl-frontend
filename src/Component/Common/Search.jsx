@@ -13,6 +13,7 @@ export const Search = () => {
 
 
   return (
+    
     <div
       className="w-[40%]  px-2 py-3 bg-white-500 md:flex items-center rounded-lg  hover:rounded-b-none  hidden relative "
       onMouseEnter={() => setItemListShow(true)}

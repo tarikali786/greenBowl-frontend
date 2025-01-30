@@ -5,41 +5,34 @@ import { useSaladContext } from "../../SaladContextApi/SaladContext";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SkeletonLoading } from "../../Common";
-import { ExploreSaladData, PopularSaladData } from "../../Data/data";
+import { ExploreSaladData } from "../../Data/data";
 import StarsIcon from "@mui/icons-material/Stars";
 export const ExploreDetail = () => {
-  const { state, dispatch } = useSaladContext();
+  const { dispatch } = useSaladContext();
   const { id } = useParams();
   const [details, setDetails] = useState([]);
+  const [loading, setIsLoading] = useState(true);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const filterData = ExploreSaladData?.filter((item) => item.id == id);
     setDetails(filterData[0]);
   }, [id]);
 
-  const [loading, setIsLoading] = useState(true);
-  const [count, setCount] = useState(0);
-  const { salad } = useParams();
-  const dynamicSalad = state[salad];
-  const dynamicCreateRecipe = state.createRecipe[count][salad];
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
-  const handleBaseSelection = (id) => {
-    if (dynamicCreateRecipe.find((i) => i.id === id)) {
-      dispatch({ type: "REMOVE_BASE", payload: id });
-    } else {
-      const Objectdata = dynamicSalad.find((i) => i.id === id);
-      if (Objectdata) {
-        dispatch({
-          type: "CREATE_RECIPE",
-          payload: { data: Objectdata, type: salad.toUpperCase() },
-        });
-      }
+  const handleAddData = () => {
+    if (details) {
+      dispatch({
+        type: "ADDCART",
+        payload: details,
+      });
     }
   };
-  console.log(details);
+
+
+  
 
   return (
     <div className="px-4 md:px-14 lg:px-24 xl:px-44 my-8">
@@ -55,7 +48,7 @@ export const ExploreDetail = () => {
           {details?.title}
         </h3>
 
-        <div className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl">
+        <div onClick={handleAddData} className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl">
           Order Now
         </div>
       </div>
@@ -65,9 +58,12 @@ export const ExploreDetail = () => {
           "A yogurt-based salad with fresh vegetables and mustard seeds."}
       </p>
       <div className="flex gap-1 mt-2">
-        {Array.from({ length: Math.ceil(details?.rating || 4.6) }, (_, index) => (
-          <StarsIcon key={index} className="text-red-600" />
-        ))}
+        {Array.from(
+          { length: Math.ceil(details?.rating || 4.6) },
+          (_, index) => (
+            <StarsIcon key={index} className="text-red-600" />
+          )
+        )}
         <b>( {details?.rating || 4.6} )</b>
       </div>
       <div className="flex gap-10 my-2">
@@ -85,10 +81,7 @@ export const ExploreDetail = () => {
       <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6 ">
         {details?.ingredients?.map((item) => (
           <div className="mt-4" key={item.id}>
-            <div
-              className={` rounded-lg shadow-lg  p-4 `}
-              key={item.id}
-            >
+            <div className={` rounded-lg shadow-lg  p-4 `} key={item.id}>
               <div className="w-full  h-[22vh]  md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
                 {loading && <SkeletonLoading />}
 

@@ -102,6 +102,12 @@ const saladReducer = (state, action) => {
         cart: [...state.cart, action.payload],
       };
 
+    case "ADDCART":
+      return {
+        ...state,
+        cart: [...state.cart, action.payload],
+      };
+
     case "RemoveRecipeFromCart":
       return {
         ...state,
@@ -118,7 +124,6 @@ const saladReducer = (state, action) => {
         },
       };
 
-   
     default:
       return state;
   }

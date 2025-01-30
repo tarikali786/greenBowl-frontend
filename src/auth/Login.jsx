@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
+import { GoogleSignUp } from "./Google";
 export const Login = () => {
   const [phone, setPhone] = useState("");
   const OnhandleChange = (e) => {
@@ -12,13 +13,12 @@ export const Login = () => {
   return (
     <div className=" min-h-screen  login-container  flex flex-col   items-center   ">
       <div className="w-[380px] mt-32  ">
-        {/* <div className="w-[180px]">
-          <img src={Logo} alt="" />
-        </div> */}
+   
         <div className="border-2 border-white-400 rounded-xl px-4 py-6  w-full mt-6  form_section">
           <h2 className="text-2xl text-center text-white-500 font-semibold">
             Sign In
           </h2>
+          <GoogleSignUp />
           <form onSubmit={handleSubmit} className="mt-5">
             <div>
               <label

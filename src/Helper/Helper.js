@@ -5,14 +5,16 @@ export const storeUser = (data) => {
   localStorage.setItem(
     "user",
     JSON.stringify({
-      userName: data.username,
-      token: data.token,
+      uid: data?.user?.uid,
+      name: data?.user?.name,
+      access_green: data.access_green,
+      refresh_green: data.refresh_green,
     })
   );
 };
 
 export const userData = () => {
-  const stringifedUser = localStorage.getItem("user") || "";
+  const stringifedUser = localStorage.getItem("user") || ' "" ';
   return JSON.parse(stringifedUser || {});
 };
 

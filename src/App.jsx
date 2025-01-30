@@ -9,11 +9,13 @@ import {
   MoreExploreSalad,
   MorePopuralSalad,
   PriceCart,
+  ProfileLayout,
   PuporalDetail,
   Recipe,
 } from "./Component";
 import { ToastContainer } from "react-toastify";
-import { Login, Register } from "./auth";
+import { Login, Register, VerifyNumber } from "./auth";
+import { Profile } from "./Component/Profile/Profile";
 
 function App() {
   return (
@@ -31,8 +33,12 @@ function App() {
           <Route path="exploreSalad" element={<MoreExploreSalad />} />
           <Route path="exploreSalad/:id" element={<ExploreDetail />} />
         </Route>
+        <Route path="/profile" element={<ProfileLayout />}>
+          <Route index element={<Profile />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-number" element={<VerifyNumber />} />
       </Routes>
       <ToastContainer
         position="top-right"

@@ -440,7 +440,6 @@ export const ExploreSaladData = [
         price: "20",
       },
     ],
-    
   },
   {
     id: 14,
@@ -773,6 +772,7 @@ export const PopularSaladData = [
     id: 26,
     img: Img9,
     title: "Broccoli Delight",
+    price:'122',
     rating: 4.5,
     description:
       "A nutritious salad made with fresh broccoli, olive oil, and lemon dressing.",
@@ -813,6 +813,8 @@ export const PopularSaladData = [
   {
     id: 27,
     img: Img10,
+    price:'142',
+
     title: "Greek Freshness",
     rating: 4.7,
     description:
@@ -864,6 +866,8 @@ export const PopularSaladData = [
   {
     id: 28,
     img: Img14,
+    price:'152',
+
     title: "Potato Bliss",
     rating: 4.3,
     description: "Creamy potato salad with a touch of mustard and mayo.",
@@ -904,6 +908,8 @@ export const PopularSaladData = [
   {
     id: 29,
     img: Img20,
+    price:'162',
+
     title: "Crisp Cucumber",
     rating: 4.6,
     description: "Refreshing cucumber salad with mint and yogurt dressing.",
@@ -944,6 +950,8 @@ export const PopularSaladData = [
   {
     id: 30,
     img: Img22,
+    price:'132',
+
     title: "Spinach Zing",
     rating: 4.8,
     description: "Spinach with tangy spices, perfect for a fresh meal.",
@@ -985,6 +993,8 @@ export const PopularSaladData = [
     img: Img11,
     title: "Papaya Crunch",
     rating: 4.4,
+    price:'232',
+
     description:
       "A crunchy and spicy salad made with green papaya and peanuts.",
     calories: "200 kcal",
@@ -1023,6 +1033,8 @@ export const PopularSaladData = [
   {
     id: 32,
     img: Img23,
+    price:'322',
+
     title: "Lentil Kosambari",
     rating: 4.7,
     description:
@@ -1062,7 +1074,9 @@ export const PopularSaladData = [
   },
   {
     id: 33,
+    price:'123',
     img: Img24,
+    
     title: "Yogurt Pachadi",
     rating: 4.2,
     description:
@@ -1103,6 +1117,7 @@ export const PopularSaladData = [
   },
   {
     id: 34,
+    price:'125',
     img: Img12,
     title: "Kachumber Feast",
     rating: 4.6,
@@ -1144,6 +1159,7 @@ export const PopularSaladData = [
   {
     id: 35,
     img: Img13,
+    price:'322',
     title: "Fruity Freshness",
     rating: 4.9,
     description: "A colorful mix of seasonal fruits with a hint of honey.",

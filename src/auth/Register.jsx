@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { post } from "../Helper/Api";
 import axios from "axios";
+import { GoogleSignUp } from "./Google";
 
 export const Register = () => {
   const [user, setUser] = useState({
@@ -96,7 +97,7 @@ export const Register = () => {
 
   return (
     <div className="min-h-screen register-container flex flex-col items-center">
-      <div className="w-[380px] mt-24">
+      <div className="md:w-[440px] w-[280px] mt-24">
         <div className="border-2 border-white-400 rounded-xl px-4 py-6 w-full mt-6 form_section">
           {otp ? (
             <>
@@ -132,6 +133,8 @@ export const Register = () => {
               <h2 className="text-2xl text-center text-white-500 font-semibold">
                 Create Account
               </h2>
+              <GoogleSignUp />
+
               <form onSubmit={handleSubmit} className="mt-5">
                 <div>
                   <label htmlFor="name" className="text-white-500">

@@ -13,7 +13,10 @@ export const Vegetables = () => {
 
   const handleVegetableSelection = (id) => {
     if (state.createRecipe[4].vegetable.some((item) => item.id === id)) {
-      dispatch({ type: "REMOVE_VEGETABLE", payload: id });
+      dispatch({
+        type: "REMOVE_ITEM_FROM_RECIPE",
+        payload: { type: "vegetable", id: id },
+      });
     } else {
       const VegetableData = state.vegetable.find((item) => item.id === id);
       if (VegetableData) {

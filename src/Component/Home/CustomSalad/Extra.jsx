@@ -14,7 +14,10 @@ export const Extra = () => {
 
   const handleExtraSelection = (id) => {
     if (state.createRecipe[3].extra.find((item) => item.id === id)) {
-      dispatch({ type: "REMOVE_EXTRA", payload: id });
+      dispatch({
+        type: "REMOVE_ITEM_FROM_RECIPE",
+        payload: { type: "extra", id: id },
+      });
     } else {
       const extraData = state.extra.find((i) => i.id === id);
       dispatch({

@@ -8,7 +8,7 @@ import { SkeletonLoading } from "../../Common";
 import { PopularSaladData } from "../../Data/data";
 import StarsIcon from "@mui/icons-material/Stars";
 export const PuporalDetail = () => {
-  const { state, dispatch } = useSaladContext();
+  const { dispatch } = useSaladContext();
   const { id } = useParams();
   const [details, setDetails] = useState([]);
 
@@ -18,28 +18,18 @@ export const PuporalDetail = () => {
   }, [id]);
 
   const [loading, setIsLoading] = useState(true);
-  const [count, setCount] = useState(0);
-  const { salad } = useParams();
-  const dynamicSalad = state[salad];
-  const dynamicCreateRecipe = state.createRecipe[count][salad];
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleBaseSelection = (id) => {
-    if (dynamicCreateRecipe.find((i) => i.id === id)) {
-      dispatch({ type: "REMOVE_BASE", payload: id });
-    } else {
-      const Objectdata = dynamicSalad.find((i) => i.id === id);
-      if (Objectdata) {
-        dispatch({
-          type: "CREATE_RECIPE",
-          payload: { data: Objectdata, type: salad.toUpperCase() },
-        });
-      }
+  const handleAddData = () => {
+    if (details) {
+      dispatch({
+        type: "ADDCART",
+        payload: details,
+      });
     }
   };
-  console.log(details);
 
   return (
     <div className="px-4 md:px-14 lg:px-24 xl:px-44 my-8">
@@ -55,7 +45,10 @@ export const PuporalDetail = () => {
           {details?.title}
         </h3>
 
-        <div className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl">
+        <div
+          onClick={handleAddData}
+          className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl"
+        >
           Order Now
         </div>
       </div>
