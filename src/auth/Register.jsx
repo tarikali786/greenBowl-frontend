@@ -134,6 +134,7 @@ export const Register = () => {
                 Create Account
               </h2>
               <GoogleSignUp />
+              <p className="text-white-500 text-center mt-4 dividerCard ">Or </p>
 
               <form onSubmit={handleSubmit} className="mt-5">
                 <div>

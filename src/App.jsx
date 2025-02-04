@@ -14,7 +14,7 @@ import {
   Recipe,
 } from "./Component";
 import { ToastContainer } from "react-toastify";
-import { Login, Register, VerifyNumber } from "./auth";
+import { GoogleNumber, Login, Register, VerifyNumber } from "./auth";
 import { Profile } from "./Component/Profile/Profile";
 
 function App() {
@@ -38,7 +38,8 @@ function App() {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/verify-number" element={<VerifyNumber />} />
+        <Route path="/verify-otp" element={<VerifyNumber />} />
+        <Route path="/number" element={<GoogleNumber />} />
       </Routes>
       <ToastContainer
         position="top-right"

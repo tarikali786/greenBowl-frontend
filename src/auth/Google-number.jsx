@@ -1,11 +1,10 @@
 import { useState } from "react";
 import "./style.css";
 import { Link, useNavigate } from "react-router-dom";
-import { GoogleSignUp } from "./Google";
 import { post } from "../Helper";
 import { toast } from "react-toastify";
 
-export const Login = () => {
+export const GoogleNumber = () => {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -16,11 +15,27 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
+    const access_token = localStorage.getItem("otpAccessCode") || "";
+    if (!access_token) {
+      toast.error("Authentication token is missing. Please log in again.");
+      navigate("/login");
+      return; // Stop execution if no token
+    }
+
     try {
-      const res = await post("/account-login/", { phone: phone });
+      const res = await post(
+        "/account-googlelogin/",
+        { phone: phone },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (res.status == 200) {
         localStorage.setItem("otpAccessCode", res?.data?.access_token);
-        toast.success(res?.data?.detail);
+        toast.success(res?.data?.message);
         navigate("/verify-otp");
       } else {
         toast.error("Something went wrong, try again");
@@ -39,8 +54,7 @@ export const Login = () => {
           <h2 className="text-2xl text-center text-white-500 font-semibold">
             Sign In
           </h2>
-          <GoogleSignUp />
-          <p className="text-white-500 text-center mt-4 dividerCard ">Or </p>
+
           <form onSubmit={handleSubmit} className="mt-5">
             <div>
               <label

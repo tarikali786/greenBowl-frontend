@@ -5,10 +5,10 @@ export const storeUser = (data) => {
   localStorage.setItem(
     "user",
     JSON.stringify({
-      uid: data?.user?.uid,
-      name: data?.user?.name,
-      access_green: data.access_green,
-      refresh_green: data.refresh_green,
+      uid: data?.data?.uid,
+      name: data?.data?.name,
+      access_green: data.access_token,
+      refresh_green: data.refresh_token,
     })
   );
 };

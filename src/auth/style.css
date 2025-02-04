@@ -1,5 +1,5 @@
 .login-container {
-  background-image: url('../assets/Home/Green-Papaya-Salad.webp');
+  background-image: url("../assets/Home/Green-Papaya-Salad.webp");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -10,9 +10,30 @@
   backdrop-filter: blur(55px);
   background-color: #ffffff10;
 }
-.register-container{
-  background-image: url('../assets/Home/OIG1.XG36U1bA44XETG_j2Svl.jpg');
+.register-container {
+  background-image: url("../assets/Home/OIG1.XG36U1bA44XETG_j2Svl.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+}
+.dividerCard {
+  position: relative;
+  width: 100%;
+}
+.dividerCard::before {
+  content: "";
+  position: absolute;
+  border: 1px solid #e3decf;
+  width: 46%;
+  left: 0;
+  bottom: 0.68rem;
+}
+
+.dividerCard::after {
+  content: "";
+  position: absolute;
+  border: 1px solid #e3decf;
+  width: 46%;
+  right: 0;
+  bottom: 0.68rem;
 }

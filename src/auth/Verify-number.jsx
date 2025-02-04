@@ -1,40 +1,57 @@
-import "./style.css";
 import { toast } from "react-toastify";
-// import { post } from "../Helper/Api";
-import axios from "axios";
+import { post } from "../Helper/Api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { storeUser } from "../Helper/Helper";
+import "./style.css";
+
 export const VerifyNumber = () => {
   const [otpValue, setOTPValue] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    const access_token = localStorage.getItem("otpAccessCode") || "";
+
+    if (!access_token) {
+      toast.error("Authentication token is missing. Please log in again.");
+      navigate("/login");
+      return; // Stop execution if no token
+    }
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/account/verify-otp/",
-        { otp: otpValue }
+      const response = await post(
+        "/verify-otp/",
+        { otp: otpValue },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
-
-      if (response.status === 200) {
+      if (response.status == 200) {
         toast.success("OTP verified successfully!");
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      } else {
-        toast.error("OTP verification failed. Please try again.");
+        console.log("Response:", response?.data);
+
+        storeUser(response?.data);
       }
+
+      navigate("/");
     } catch (error) {
-      if (error.response && error.response.data) {
-        const errorMessage =
-          error.response.data.detail || "Invalid OTP. Please try again.";
-        toast.error(errorMessage);
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
+      console.error("Error Response:", error.response?.data || error);
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen register-container flex flex-col items-center">
       <div className="w-[380px] mt-24">
@@ -60,9 +77,11 @@ export const VerifyNumber = () => {
 
             <button
               type="submit"
-              className="bg-red-600 w-full mt-3 py-2 rounded-xl text-white-500"
+              className={`bg-red-600 w-full mt-3 py-2 rounded-xl text-white-500 ${
+                loading && "cursor-not-allowed"
+              }`}
             >
-              Verify OTP
+              {loading ? "Loading..." : " Verify OTP"}
             </button>
           </form>
         </div>
