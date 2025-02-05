@@ -14,13 +14,14 @@ export const Login = () => {
     setPhone(e.target.value);
   };
   const handleSubmit = async (e) => {
-    setLoading(true);
+  
     e.preventDefault();
+      setLoading(true);
     try {
       const res = await post("/account-login/", { phone: phone });
       if (res.status == 200) {
         localStorage.setItem("otpAccessCode", res?.data?.access_token);
-        toast.success(res?.data?.detail);
+        toast.success(res?.data?.message);
         navigate("/verify-otp");
       } else {
         toast.error("Something went wrong, try again");

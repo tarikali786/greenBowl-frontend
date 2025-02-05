@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 
 // Function to make a GET request
 export const get = async (url, config) => {
-  try { 
+  try {
     const response = await axiosInstance.get(url, config || null);
 
     if (response.status == 200) {
@@ -29,6 +29,8 @@ export const post = async (url, data, config) => {
     const response = await axiosInstance.post(url, data, config || null);
     return response;
   } catch (error) {
+
+
     throw handleRequestError(error);
   }
 };
@@ -54,7 +56,7 @@ export const remove = async (url, config) => {
 };
 
 // Handle request error and return consistent error messages
-const handleRequestError = (error) => { 
+const handleRequestError = (error) => {
   if (error.response) {
     if (error.response.status === 401) {
       // window.location.href = "/auth/sing-in";
