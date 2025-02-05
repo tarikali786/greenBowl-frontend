@@ -52,7 +52,7 @@ export const Extra = () => {
           <div className="mt-8" key={item.id}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
-                state.createRecipe[0].base.some((i) => i.id === item.id)
+                state.createRecipe[3].extra.some((i) => i.id === item.id)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -108,7 +108,7 @@ export const Extra = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    state.createRecipe[0].base.some((i) => i.id === item.id)
+                    state.createRecipe[3].extra.some((i) => i.id === item.id)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}

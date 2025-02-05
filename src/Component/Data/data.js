@@ -1670,6 +1670,7 @@ export const CustomExtrasData = [
     description: "Freshly squeezed for a zesty flavor boost.",
     calories: "5 ",
     price: "5",
+    weight:"500"
   },
   {
     id: 83,
@@ -1678,22 +1679,28 @@ export const CustomExtrasData = [
     description: "Adds a tangy, earthy flavor to your salad.",
     calories: "0 ",
     price: "2",
+    weight:"500"
+
   },
   {
     id: 84,
     img: extra3, // Replace with the image source or URL for Chili Flakes
     title: "Chili Flakes",
     description: "For a touch of heat and spice.",
-    calories: "6 kcal per tsp",
+    calories: "6 ",
     price: "3",
+    weight:"500"
+
   },
   {
     id: 85,
     img: extra4, // Replace with the image source or URL for Mint Leaves
     title: "Mint Leaves",
     description: "Refreshing and aromatic for a fresh finish.",
-    calories: "2 kcal per 5 leaves",
+    calories: "2 ",
     price: "4",
+    weight:"500"
+
   },
   {
     id: 86,
@@ -1702,6 +1709,8 @@ export const CustomExtrasData = [
     description: "A natural sweetener to balance flavors.",
     calories: "64 ",
     price: "10",
+    weight:"500"
+
   },
   {
     id: 87,
@@ -1710,5 +1719,7 @@ export const CustomExtrasData = [
     description: "Fresh and spicy for those who love heat.",
     calories: "40 ",
     price: "6",
+    weight:"500"
+
   },
 ];

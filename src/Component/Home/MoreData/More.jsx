@@ -47,6 +47,14 @@ export const More = () => {
     }
   };
 
+  const handleWeight = (e, id) => {
+    e.stopPropagation();
+    dispatch({
+      type: "INCREASEWEIGHT",
+      payload: { typeKey: salad, id: id, weightChange: 250 },
+    });
+  };
+
   return (
     <div className="px-4 md:px-14 lg:px-24 xl:px-44 my-8">
       <div className="flex justify-between items-center">
@@ -63,12 +71,9 @@ export const More = () => {
                   ? "border-4 border-green-500"
                   : ""
               }`}
-              key={item.id}
-              onClick={() => handleItemSelection(item.id)}
             >
-              <div className="w-full  h-[22vh]  md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
+              <div className="w-full h-[22vh] md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
                 {loading && <SkeletonLoading />}
-
                 <img
                   src={item.img}
                   alt=""
@@ -81,27 +86,54 @@ export const More = () => {
                 <p className="text-[18px] font-semibold text-black-600 mt-1">
                   {item.title}
                 </p>
-                <div>
-                  <p>
-                    <ScaleRoundedIcon className="text-green-600 " />{" "}
-                    {item?.weight}
-                  </p>
+                <div className="flex items-center gap-2">
+                  <ScaleRoundedIcon className="text-green-600" />
+                  <div className="bg-white-400 rounded-md flex items-center overflow-hidden">
+                    <p
+                      contentEditable
+                      suppressContentEditableWarning
+                      className="outline-none px-1 pl-2"
+                    >
+                      {item.weight}g
+                    </p>
+                    <button
+                      onClick={(e) => handleWeight(e, item.id)}
+                      disabled={item.weight <= 250}
+                      className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
               </div>
 
               <div className="text-[16px] font-semibold text-black-600 flex items-center justify-between gap-1 my-2">
                 <p>
-                  <CurrencyRupeeRoundedIcon className="text-green-600 " />{" "}
-                  {item?.price}
-                </p>
-                <p>
-                  <WhatshotRoundedIcon className="text-green-600 " />{" "}
-                  {item?.calories}
+                  <WhatshotRoundedIcon className="text-green-600" />{" "}
+                  {item?.calories} kcal per 100g
                 </p>
               </div>
-              <p className="text-sm  text-black-200  line-clamp-2">
+              <p className="text-sm text-black-200 line-clamp-2">
                 {item.description}
               </p>
+              <div className="flex justify-between mt-2 items-center">
+                <p>
+                  <CurrencyRupeeRoundedIcon className="text-green-600" />{" "}
+                  {item?.price}
+                </p>
+                <button
+                  className={`px-5 py-1 text-white-500 rounded-md ${
+                    dynamicCreateRecipe?.some((i) => i.id === item.id)
+                      ? "bg-red-500 "
+                      : "bg-green-500 "
+                  }`}
+                  onClick={() => handleItemSelection(item.id)}
+                >
+                  {dynamicCreateRecipe?.some((i) => i.id === item.id)
+                    ? "Remove"
+                    : "Add"}
+                </button>
+              </div>
             </div>
           </div>
         ))}
