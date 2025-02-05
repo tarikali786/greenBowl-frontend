@@ -12,6 +12,7 @@ import {
   ProfileLayout,
   PuporalDetail,
   Recipe,
+  SearcMoreDetails,
 } from "./Component";
 import { ToastContainer } from "react-toastify";
 import { GoogleNumber, Login, Register, VerifyNumber } from "./auth";
@@ -29,6 +30,7 @@ function App() {
           <Route path="recepi/:salad" element={<More />} />
           <Route path="popuralSalad" element={<MorePopuralSalad />} />
           <Route path="popuralSalad/:id" element={<PuporalDetail />} />
+          <Route path="searchData/:id" element={<SearcMoreDetails />} />
 
           <Route path="exploreSalad" element={<MoreExploreSalad />} />
           <Route path="exploreSalad/:id" element={<ExploreDetail />} />
