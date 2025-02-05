@@ -19,10 +19,6 @@ const initialState = {
   extra: CustomExtrasData || [],
   recipe: [],
   cart: [],
-  orderPrice: {
-    recipeName: "",
-    price: "",
-  },
   createRecipe: [
     { base: [] },
     { topping: [] },
@@ -31,7 +27,6 @@ const initialState = {
     { vegetable: [] },
     { recipeName: "" },
   ],
-
   searchItem: {},
 };
 
@@ -44,10 +39,10 @@ const saladReducer = (state, action) => {
       return {
         ...state,
         createRecipe: state.createRecipe.map((section) =>
-          section[typeKey]
+          section[typeKey] && Array.isArray(section[typeKey])
             ? {
                 ...section,
-                [typeKey]: [...section[typeKey], data],
+                [typeKey]: [...section[typeKey], data], // Add the new item
               }
             : section
         ),
@@ -60,7 +55,7 @@ const saladReducer = (state, action) => {
       return {
         ...state,
         createRecipe: state.createRecipe.map((section) =>
-          section[typeKey]
+          section[typeKey] && Array.isArray(section[typeKey])
             ? {
                 ...section,
                 [typeKey]: section[typeKey].filter((item) => item.id !== id),
@@ -123,6 +118,28 @@ const saladReducer = (state, action) => {
           recipeName: action.payload.recipeName,
         },
       };
+
+    case "INCREASEWEIGHT": {
+      const { id, weightChange, typeKey } = action.payload;
+
+      return {
+        ...state,
+        [typeKey]:
+          state[typeKey] && Array.isArray(state[typeKey])
+            ? state[typeKey].map((item) =>
+                item.id === id
+                  ? {
+                      ...item,
+                      weight:
+                        (item.weight ? parseInt(item.weight, 10) : 250) +
+                        parseInt(weightChange, 10),
+                      price: Math.floor(item.price * 1.5),
+                    }
+                  : item
+              )
+            : state[typeKey], 
+      };
+    }
 
     default:
       return state;
