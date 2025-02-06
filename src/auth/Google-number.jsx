@@ -16,10 +16,11 @@ export const GoogleNumber = () => {
     setLoading(true);
     e.preventDefault();
     const access_token = localStorage.getItem("otpAccessCode") || "";
+
     if (!access_token) {
       toast.error("Authentication token is missing. Please log in again.");
       navigate("/login");
-      return; // Stop execution if no token
+      return;
     }
 
     try {

@@ -25,12 +25,12 @@ export const get = async (url, config) => {
 
 // Function to make a POST request
 export const post = async (url, data, config) => {
+  console.log(axiosInstance?.baseURL);
+
   try {
     const response = await axiosInstance.post(url, data, config || null);
     return response;
   } catch (error) {
-
-
     throw handleRequestError(error);
   }
 };
