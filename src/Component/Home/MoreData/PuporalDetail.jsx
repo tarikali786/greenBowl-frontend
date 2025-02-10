@@ -8,7 +8,7 @@ import { SkeletonLoading } from "../../Common";
 import { PopularSaladData } from "../../Data/data";
 import StarsIcon from "@mui/icons-material/Stars";
 export const PuporalDetail = () => {
-  const { dispatch } = useSaladContext();
+  const { state, dispatch } = useSaladContext();
   const { id } = useParams();
   const [details, setDetails] = useState([]);
 
@@ -24,10 +24,19 @@ export const PuporalDetail = () => {
 
   const handleAddData = () => {
     if (details) {
-      dispatch({
-        type: "ADDCART",
-        payload: details,
-      });
+      const isItemInCart = state?.cart.some((item) => item.id === details.id);
+
+      if (isItemInCart) {
+        dispatch({
+          type: "RemoveRecipeFromCart",
+          payload: details.id,
+        });
+      } else {
+        dispatch({
+          type: "ADDCART",
+          payload: details,
+        });
+      }
     }
   };
 
@@ -44,13 +53,21 @@ export const PuporalDetail = () => {
         <h3 className="text-2xl mt-4 font-semibold text-black-600">
           {details?.title}
         </h3>
-
-        <div
-          onClick={handleAddData}
-          className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl"
-        >
-          Order Now
-        </div>
+        {state?.cart.some((item) => item.id === details.id) ? (
+          <div
+            onClick={handleAddData}
+            className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500 rounded-xl"
+          >
+            Remove
+          </div>
+        ) : (
+          <div
+            onClick={handleAddData}
+            className="text-lg bg-green-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-red-500 rounded-xl"
+          >
+            Order Now
+          </div>
+        )}
       </div>
 
       <p>{details?.description}</p>

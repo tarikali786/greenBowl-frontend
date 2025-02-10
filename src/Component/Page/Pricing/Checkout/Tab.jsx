@@ -15,7 +15,7 @@ export const Tab = memo(({ tabvalue, settabValue, checkInfo }) => {
             : "hover:bg-blue-500 "
         }`}
       >
-        <p className=" ">1 Imformation</p>
+        <p className=" ">Address</p>
         {tabvalue === "1" && (
           <div className=" absolute   top-4 w-0 h-0 border-white-500 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-blue-500 my-8" />
         )}
@@ -30,7 +30,7 @@ export const Tab = memo(({ tabvalue, settabValue, checkInfo }) => {
             : checkInfo && "hover:bg-blue-500 "
         }`}
       >
-        <p>2 Payment</p>
+        <p> Payment</p>
         {tabvalue === "2" && (
           <div className=" absolute  top-4 w-0 h-0 border-white-500 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-blue-500 my-8" />
         )}

@@ -8,10 +8,11 @@ import { SkeletonLoading } from "../../Common";
 import { ExploreSaladData } from "../../Data/data";
 import StarsIcon from "@mui/icons-material/Stars";
 export const ExploreDetail = () => {
-  const { dispatch } = useSaladContext();
+  const { state, dispatch } = useSaladContext();
   const { id } = useParams();
   const [details, setDetails] = useState([]);
   const [loading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -21,18 +22,19 @@ export const ExploreDetail = () => {
     setDetails(filterData[0]);
   }, [id]);
 
-
   const handleAddData = () => {
     if (details) {
-      dispatch({
-        type: "ADDCART",
-        payload: details,
-      });
+      const isItemInCart = state?.cart.find((item) => item.id === details.id);
+      if (isItemInCart) {
+        dispatch({ type: "RemoveRecipeFromCart", payload: details.id });
+      } else {
+        dispatch({
+          type: "ADDCART",
+          payload: details,
+        });
+      }
     }
   };
-
-
-  
 
   return (
     <div className="px-4 md:px-14 lg:px-24 xl:px-44 my-8">
@@ -47,10 +49,21 @@ export const ExploreDetail = () => {
         <h3 className="text-2xl mt-4 font-semibold text-black-600">
           {details?.title}
         </h3>
-
-        <div onClick={handleAddData} className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl">
-          Order Now
-        </div>
+        {state?.cart.find((item) => item.id === details.id) ? (
+          <div
+            onClick={handleAddData}
+            className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl"
+          >
+            Remove
+          </div>
+        ) : (
+          <div
+            onClick={handleAddData}
+            className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl"
+          >
+            Order Now
+          </div>
+        )}
       </div>
 
       <p>
