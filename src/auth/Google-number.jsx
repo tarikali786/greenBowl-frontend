@@ -25,7 +25,7 @@ export const GoogleNumber = () => {
 
     try {
       const res = await post(
-        "/account-googlelogin/",
+        "/account/account-googlelogin/",
         { phone: phone },
         {
           headers: {

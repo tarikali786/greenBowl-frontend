@@ -35,13 +35,15 @@ export const Cart = () => {
   };
 
   const handlePriceForOrder = (price, recipeName) => {
+    console.log(price, recipeName);
+    
     dispatch({
       type: "GetPriceForOrder",
       payload: { price: price, recipeName: recipeName },
     });
   };
 
-  console.log(state?.cart);
+
 
   return (
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 flex flex-col gap-y-4">

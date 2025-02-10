@@ -24,7 +24,7 @@ export const VerifyNumber = () => {
 
     try {
       const response = await post(
-        "/verify-otp/",
+        "/account/verify-otp/",
         { otp: otpValue },
         {
           headers: {

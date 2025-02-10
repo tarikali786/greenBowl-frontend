@@ -1,20 +1,18 @@
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+
 import { toast } from "react-toastify";
 
 import { useNavigate } from "react-router-dom";
 import { storeUser } from "../Helper";
+import { post } from "../servic";
 export const GoogleSignUp = () => {
   const navigate = useNavigate();
   const handleLoginSuccess = async (credentialResponse) => {
     try {
       console.log("Sending token:", credentialResponse.credential); // Debugging token
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/account/google-login/",
-        {
-          token: credentialResponse.credential,
-        }
-      );
+      const response = await post("/account/google-login/", {
+        token: credentialResponse.credential,
+      });
 
       if (response.status === 200) {
         console.log("Login Success:", response.data);

@@ -18,7 +18,7 @@ export const Login = () => {
     e.preventDefault();
       setLoading(true);
     try {
-      const res = await post("/account-login/", { phone: phone });
+      const res = await post("/account/account-login/", { phone: phone });
       if (res.status == 200) {
         localStorage.setItem("otpAccessCode", res?.data?.access_token);
         toast.success(res?.data?.message);

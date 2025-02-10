@@ -19,6 +19,7 @@ const initialState = {
   extra: CustomExtrasData || [],
   recipe: [],
   cart: [],
+  price: 220,
   createRecipe: [
     { base: [] },
     { topping: [] },
@@ -137,7 +138,7 @@ const saladReducer = (state, action) => {
                     }
                   : item
               )
-            : state[typeKey], 
+            : state[typeKey],
       };
     }
 

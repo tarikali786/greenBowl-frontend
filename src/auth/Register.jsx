@@ -29,7 +29,7 @@ export const Register = () => {
     console.log(user);
 
     try {
-      const response = await post("/account-register/", user);
+      const response = await post("/account/account-register/", user);
       toast.success(response.data.message);
       localStorage.setItem("otpAccessCode", response?.data?.access_token);
       navigate("/verify-otp");

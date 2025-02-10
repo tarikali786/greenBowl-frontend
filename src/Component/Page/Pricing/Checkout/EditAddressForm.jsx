@@ -8,7 +8,7 @@ import { post } from "../../../../servic";
 import { userData } from "../../../../Helper/Helper";
 import { useEffect, useState } from "react";
 
-export const AddressForm = ({ setUserAddress, userAddress, setAddAddress }) => {
+export const AddressForm = ({ setUserAddress, userAddress }) => {
   const [loading, setLoading] = useState(false);
   const [states, setStates] = useState([]);
   const { access_green } = userData();
@@ -52,9 +52,10 @@ export const AddressForm = ({ setUserAddress, userAddress, setAddAddress }) => {
   useEffect(() => {
     fetchCountryData();
   }, []);
+  console.log(userInfo);
 
   const createUserAddress = async () => {
-    const api = `/account/create-user-address/`;
+    const api = `/create-user-address/`;
 
     try {
       const response = await post(api, userInfo, { headers });
@@ -62,8 +63,8 @@ export const AddressForm = ({ setUserAddress, userAddress, setAddAddress }) => {
 
       if (response.status == 201) {
         setUserAddress([...(userAddress || []), response.data]);
+
         toast.success("Successfully added");
-        setAddAddress(false);
       } else {
         console.error("something went wrong");
       }
