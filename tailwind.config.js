@@ -6,6 +6,8 @@ export default {
       boxShadow: {
         lg: "0 0 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
       },
+
+
     },
     screens: {
       sm: "480px",
@@ -17,9 +19,10 @@ export default {
     colors: {
       green: {
         500: "#2a9400",
-        600: " #34b900",
+        600: "#34b900",
         100: "#a4e989",
       },
+      
       white: {
         500: "#FFFFFF",
         400: "#e0e0e0",
@@ -27,6 +30,7 @@ export default {
         200: "#b5b5b5",
         100: "#f8f8f8",
       },
+
       black: {
         600: " #1F1F1F",
         500: "#000000",

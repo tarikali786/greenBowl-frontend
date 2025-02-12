@@ -13,7 +13,7 @@ const Checkout = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-semibold mb-6 text-center">Checkout</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-center ">Checkout</h1>
       <div className="flex justify-center gap-4">
         <b>Order Details:</b>
 
@@ -28,3 +28,4 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
