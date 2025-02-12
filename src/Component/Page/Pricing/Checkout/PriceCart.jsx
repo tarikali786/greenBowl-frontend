@@ -9,8 +9,6 @@ export const PriceCart = () => {
   const [paymentIntentId, setPaymentIntentid] = useState("");
 
   const [checkInfo, setCheckInfo] = useState(false);
-  const { price } = useSaladContext();
-  console.log(price);
 
   return (
     <div className=" md:px-10 lg:px-12 xl:px-44 px-6 w-full pb-10   text-white-500 py-10">

@@ -82,7 +82,7 @@ export const CheckoutForm = ({ paymentIntentId }) => {
           .
         </p>
         <div className="flex justify-between mt-6 items-center">
-          <Link to="/subscription" className="text-blue-500 cursor-pointer">
+          <Link to="/cart" className="text-blue-500 cursor-pointer">
             Return to information
           </Link>
           <button
@@ -90,7 +90,7 @@ export const CheckoutForm = ({ paymentIntentId }) => {
             disabled={isProcessing || !stripe}
             className=" bg-green-600 text-white-500 bg-blue-700 font-semibold py-3 px-4 rounded-md hover:bg-yellow-500 transition disabled:opacity-50"
           >
-            {isProcessing ? "Processing..." : "Sign up now"}
+            {isProcessing ? "Processing..." : "order Now"}
           </button>
         </div>
 

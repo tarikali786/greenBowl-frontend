@@ -16,7 +16,7 @@ export const Information = memo(
     const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [addAddress, setAddAddress] = useState(false);
-    const { price } = useSaladContext();
+    const { state } = useSaladContext();
     const headers = {
       Authorization: `Bearer ${access_green}`,
       "Content-Type": "application/json",
@@ -48,6 +48,7 @@ export const Information = memo(
       }
     };
 
+   
     useEffect(() => {
       fetchUserAddressList();
     }, []);
@@ -58,7 +59,7 @@ export const Information = memo(
 
     const handleContinue = async () => {
       const data = {
-        amount: price * 100,
+        amount: state?.price * 100,
         address: {
           line1: selectAddress?.street_address,
           city: selectAddress?.city,
@@ -82,7 +83,6 @@ export const Information = memo(
       } finally {
         setLoading1(false);
       }
-      settabValue("2");
     };
 
     if (loading) return <p className="text-black-500 mt-8">Loading...</p>;
