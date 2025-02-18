@@ -1,37 +1,40 @@
 import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
-import { useSaladContext } from "../../SaladContextApi/SaladContext";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SkeletonLoading } from "../../Common";
-import { ExploreSaladData } from "../../Data/data";
 import StarsIcon from "@mui/icons-material/Stars";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addRecipeTocart,
+  removeRecipeFromCart,
+} from "../../../features/saladSlice";
 export const ExploreDetail = () => {
-  const { state, dispatch } = useSaladContext();
+  const dispatch = useDispatch();
+  const exploreData = useSelector((state) => state?.salad?.exploreData);
+  const cartData = useSelector((state) => state?.salad?.cart);
+
   const { id } = useParams();
   const [details, setDetails] = useState([]);
   const [loading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    const filterData = ExploreSaladData?.filter((item) => item.id == id);
+    const filterData = exploreData?.filter((item) => item.id == id);
     setDetails(filterData[0]);
   }, [id]);
 
   const handleAddData = () => {
     if (details) {
-      const isItemInCart = state?.cart.find((item) => item.id === details.id);
+      const isItemInCart = cartData.find((item) => item.id === details.id);
       if (isItemInCart) {
-        dispatch({ type: "RemoveRecipeFromCart", payload: details.id });
+        dispatch(removeRecipeFromCart(details.id));
       } else {
-        dispatch({
-          type: "ADDCART",
-          payload: details,
-        });
+        dispatch(addRecipeTocart(details));
       }
     }
   };
@@ -49,7 +52,7 @@ export const ExploreDetail = () => {
         <h3 className="text-2xl mt-4 font-semibold text-black-600">
           {details?.title}
         </h3>
-        {state?.cart.find((item) => item.id === details.id) ? (
+        {cartData.find((item) => item.id === details.id) ? (
           <div
             onClick={handleAddData}
             className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl"

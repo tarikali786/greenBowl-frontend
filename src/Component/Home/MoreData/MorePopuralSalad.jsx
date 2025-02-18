@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { PopularSaladData } from "../../Data/data";
 import StarsRoundedIcon from "@mui/icons-material/StarsRounded";
 import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import { useState } from "react";
 import { SkeletonLoading } from "../../Common";
+import { useSelector } from "react-redux";
 export const MorePopuralSalad = () => {
   const [loading, setIsLoading] = useState(true);
-
+  const popularSaladData = useSelector((state) => state.salad.popularData);
   return (
     <div className="px-4 md:px-14 lg:px-34 xl:px-44 py-6 ">
       <div className="flex justify-between items-center">
@@ -15,7 +15,7 @@ export const MorePopuralSalad = () => {
         </h1>
       </div>
       <div className="my-8 grid mm:grid-cols-2 lg:grid-cols-3  gap-8 ">
-        {PopularSaladData?.map((item) => (
+        {popularSaladData?.map((item) => (
           <div className="country-Card" key={item.id}>
             <Link
               to={`/popuralSalad/${item?.id}`}

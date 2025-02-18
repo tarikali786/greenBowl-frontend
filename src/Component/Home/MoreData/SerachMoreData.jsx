@@ -1,17 +1,19 @@
 import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
-import { useSaladContext } from "../../SaladContextApi/SaladContext";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SkeletonLoading } from "../../Common";
 import { ExploreSaladData, PopularSaladData } from "../../Data/data";
 import StarsIcon from "@mui/icons-material/Stars";
+import { useDispatch, useSelector } from "react-redux";
+import { addRecipeTocart } from "../../../features/saladSlice";
 export const SearcMoreDetails = () => {
-  const { dispatch } = useSaladContext();
+  const dispatch = useDispatch();
   const { id } = useParams();
   const [details, setDetails] = useState([]);
   const [loading, setIsLoading] = useState(true);
+  const cartList = useSelector((state) => state.salad.cart);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -25,10 +27,7 @@ export const SearcMoreDetails = () => {
 
   const handleAddData = () => {
     if (details) {
-      dispatch({
-        type: "ADDCART",
-        payload: details,
-      });
+      dispatch(addRecipeTocart(details));
     }
   };
 
@@ -46,12 +45,21 @@ export const SearcMoreDetails = () => {
           {details?.title}
         </h3>
 
-        <div
-          onClick={handleAddData}
-          className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl"
-        >
-          Order Now
-        </div>
+        {cartList.find((item) => item.id === details.id) ? (
+          <div
+            onClick={handleAddData}
+            className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl"
+          >
+            Remove
+          </div>
+        ) : (
+          <div
+            onClick={handleAddData}
+            className="text-lg bg-red-500 text-white-500 px-3 py-[8px] cursor-pointer hover:bg-green-500  rounded-xl"
+          >
+            Add To Cart
+          </div>
+        )}
       </div>
 
       <p>

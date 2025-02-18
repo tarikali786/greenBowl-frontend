@@ -2,40 +2,41 @@ import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import FilterNoneRoundedIcon from "@mui/icons-material/FilterNoneRounded";
-import { useSaladContext } from "../../SaladContextApi/SaladContext";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { SkeletonLoading } from "../../Common";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  createRecipe,
+  increaseWeightOfItem,
+  removeItemFromRecipe,
+} from "../../../features/saladSlice";
 
 export const Base = () => {
-  const { state, dispatch } = useSaladContext();
   const [loading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
+
+  const baseData = useSelector((state) => state.salad.base);
+  const base = useSelector((state) => state.salad.createRecipe[0].base);
 
   const handleBaseSelection = (id) => {
-    const isItemInRecipe = state.createRecipe[0].base.some((i) => i.id === id);
-
+    const isItemInRecipe = base.some((i) => i.id === id);
     if (isItemInRecipe) {
-      dispatch({
-        type: "REMOVE_ITEM_FROM_RECIPE",
-        payload: { type: "base", id: id },
-      });
+      dispatch(removeItemFromRecipe({ type: "base", id: id }));
     } else {
-      const Objectdata = state.base.find((i) => i.id === id);
+      const Objectdata = baseData.find((i) => i.id === id);
+
       if (Objectdata) {
-        dispatch({
-          type: "CREATE_RECIPE",
-          payload: { data: Objectdata, type: "BASE" },
-        });
+        dispatch(createRecipe({ data: Objectdata, type: "base" }));
       }
     }
   };
 
   const handleWeight = (e, id) => {
     e.stopPropagation();
-    dispatch({
-      type: "INCREASEWEIGHT",
-      payload: { typeKey: "base", id: id, weightChange: 250 }, // Increment weight by 250g
-    });
+    dispatch(
+      increaseWeightOfItem({ typeKey: "base", id: id, weightChange: 250 })
+    );
   };
 
   return (
@@ -52,11 +53,11 @@ export const Base = () => {
         </Link>
       </div>
       <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6">
-        {state.base.slice(0, 4).map((item) => (
+        {baseData.slice(0, 4).map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
-                state.createRecipe[0].base.some((i) => i.id === item.id)
+                base.some((i) => i.id == item.id)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -112,15 +113,13 @@ export const Base = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    state.createRecipe[0].base.some((i) => i.id === item.id)
+                    base.some((i) => i.id === item.id)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
                   onClick={() => handleBaseSelection(item.id)}
                 >
-                  {state.createRecipe[0].base.some((i) => i.id === item.id)
-                    ? "Remove"
-                    : "Add"}
+                  {base.some((i) => i.id === item.id) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

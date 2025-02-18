@@ -5,35 +5,39 @@ import veg from "../../../assets/icon/veg.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { SkeletonLoading } from "../../Common";
-import { useSaladContext } from "../../SaladContextApi/SaladContext";
+import {
+  createRecipe,
+  increaseWeightOfItem,
+  removeItemFromRecipe,
+} from "../../../features/saladSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Vegetables = () => {
-  const { state, dispatch } = useSaladContext();
+  const dispatch = useDispatch();
+  const VegetableData = useSelector((state) => state.salad.vegetable);
+
+  const vegetable = useSelector(
+    (state) => state.salad.createRecipe[4].vegetable
+  );
+
   const [loading, setIsLoading] = useState(true);
 
   const handleVegetableSelection = (id) => {
-    if (state.createRecipe[4].vegetable.some((item) => item.id === id)) {
-      dispatch({
-        type: "REMOVE_ITEM_FROM_RECIPE",
-        payload: { type: "vegetable", id: id },
-      });
+    if (vegetable.some((item) => item.id === id)) {
+      dispatch(removeItemFromRecipe({ type: "vegetable", id: id }));
     } else {
-      const VegetableData = state.vegetable.find((item) => item.id === id);
-      if (VegetableData) {
-        dispatch({
-          type: "CREATE_RECIPE",
-          payload: { type: "VEGETABLE", data: VegetableData },
-        });
+      const data = VegetableData.find((item) => item.id === id);
+      if (data) {
+        dispatch(createRecipe({ type: "vegetable", data: data }));
       }
     }
   };
 
   const handleWeight = (e, id) => {
     e.stopPropagation();
-    dispatch({
-      type: "INCREASEWEIGHT",
-      payload: { typeKey: "vegetable", id: id, weightChange: 250 }, // Increment weight by 250g
-    });
+    dispatch(
+      increaseWeightOfItem({ typeKey: "vegetable", id: id, weightChange: 250 })
+    );
   };
 
   return (
@@ -54,11 +58,11 @@ export const Vegetables = () => {
         </Link>
       </div>
       <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {state?.vegetable.slice(0, 4).map((item) => (
+        {VegetableData.slice(0, 4).map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
-                state.createRecipe[4].vegetable.some((i) => i.id === item.id)
+                vegetable.some((i) => i.id === item.id)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -114,15 +118,13 @@ export const Vegetables = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    state.createRecipe[4].vegetable.some((i) => i.id === item.id)
+                    vegetable.some((i) => i.id === item.id)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
                   onClick={() => handleVegetableSelection(item.id)}
                 >
-                  {state.createRecipe[4].vegetable.some((i) => i.id === item.id)
-                    ? "Remove"
-                    : "Add"}
+                  {vegetable.some((i) => i.id === item.id) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

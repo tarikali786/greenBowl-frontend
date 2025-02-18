@@ -5,32 +5,43 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { SkeletonLoading } from "../../Common";
 import DressingIocn from "../../../assets/icon/dress.png";
-import { useSaladContext } from "../../SaladContextApi/SaladContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createRecipe,
+  increaseWeightOfItem,
+  removeItemFromRecipe,
+} from "../../../features/saladSlice";
 export const Dressing = () => {
-  const { state, dispatch } = useSaladContext();
   const [loading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
+  const dressingData = useSelector((state) => state.salad.dressing);
+  const dressing = useSelector((state) => state.salad.createRecipe[2].dressing);
 
   const handleDressingSelection = (id) => {
-    if (state.createRecipe[2].dressing.find((item) => item.id === id)) {
-      dispatch({
-        type: "REMOVE_ITEM_FROM_RECIPE",
-        payload: { type: "dressing", id: id },
-      });
+    if (dressing.find((item) => item.id === id)) {
+      dispatch(removeItemFromRecipe({ type: "dressing", id: id }));
     } else {
-      const DressingData = state.dressing.find((i) => i.id === id);
-      dispatch({
-        type: "CREATE_RECIPE",
-        payload: { type: "DRESSING", data: DressingData },
-      });
+      const data = dressingData.find((i) => i.id === id);
+      if (data) {
+        dispatch(
+          createRecipe({
+            type: "dressing",
+            data: data,
+          })
+        );
+      }
     }
   };
 
   const handleWeight = (e, id) => {
     e.stopPropagation();
-    dispatch({
-      type: "INCREASEWEIGHT",
-      payload: { typeKey: "base", id: id, weightChange: 250 }, // Increment weight by 250g
-    });
+    dispatch(
+      increaseWeightOfItem({
+        typeKey: "dressing",
+        id: id,
+        weightChange: 250,
+      })
+    );
   };
 
   return (
@@ -51,11 +62,11 @@ export const Dressing = () => {
         </Link>
       </div>
       <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {state?.dressing?.slice(0, 4).map((item) => (
+        {dressingData?.slice(0, 4).map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
-                state.createRecipe[2].dressing.some((i) => i.id === item.id)
+                dressing.some((i) => i.id === item.id)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -111,15 +122,13 @@ export const Dressing = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    state.createRecipe[2].dressing.some((i) => i.id === item.id)
+                    dressing.some((i) => i.id === item.id)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
                   onClick={() => handleDressingSelection(item.id)}
                 >
-                  {state.createRecipe[2].dressing.some((i) => i.id === item.id)
-                    ? "Remove"
-                    : "Add"}
+                  {dressing.some((i) => i.id === item.id) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

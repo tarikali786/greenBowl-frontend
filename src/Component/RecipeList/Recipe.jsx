@@ -1,7 +1,13 @@
-import { useSaladContext } from "../SaladContextApi/SaladContext";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  addRecipeTocart,
+  removeRecipeFromList,
+} from "../../features/saladSlice";
 export const Recipe = () => {
-  const { state, dispatch } = useSaladContext();
+  const dispatch = useDispatch();
+  const recipeList = useSelector((state) => state.salad.recipe);
+  const cartList = useSelector((state) => state.salad.cart);
 
   // Function to calculate the total price of a recipe
   const calculateTotalPrice = (recipe) => {
@@ -32,21 +38,21 @@ export const Recipe = () => {
   };
 
   const handleRemoveRecipe = (id) => {
-    dispatch({ type: "RemoveRecipeFromList", payload: id });
+    dispatch(removeRecipeFromList(id));
   };
 
   const handleAddToCartRecipe = (id) => {
-    const checkData = state.cart.filter((item) => item.id === id);
+    const checkData = cartList.filter((item) => item.id === id);
 
     if (checkData.length === 0) {
-      const data = state.recipe.find((item) => item.id === id);
-      dispatch({ type: "AddRecipeToCart", payload: data });
+      const data = recipeList.find((item) => item.id === id);
+      dispatch(addRecipeTocart(data));
     }
   };
 
   return (
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 flex flex-col gap-y-4">
-      {state?.recipe.length === 0 && (
+      {recipeList.length === 0 && (
         <div className="flex flex-col gap-10 my-20">
           <p className="text-center text-gray-500 text-lg mt-6">
             No recipes available yet! Start creating your first delicious salad
@@ -63,10 +69,10 @@ export const Recipe = () => {
         </div>
       )}
 
-      {state?.recipe.map((recipe, recipeIndex) => (
+      {recipeList.map((recipe) => (
         <div
           className="flex gap-8 border-b border-white-200 pb-4"
-          key={recipeIndex}
+          key={recipe?.id}
         >
           <div className="w-60 h-40 border flex flex-wrap justify-start overflow-y-auto rounded">
             {["base", "topping", "dressing", "extra", "vegetable"].map(
@@ -85,7 +91,7 @@ export const Recipe = () => {
 
           <div>
             <h1 className="text-lg font-semibold text-black-600">
-              {recipe[5]?.recipeName}
+              {recipe?.recipeName}
             </h1>
 
             <div className="flex gap-1">
@@ -110,11 +116,19 @@ export const Recipe = () => {
             </p>
             <div className="flex gap-6 mt-5">
               <button
-                className="text-sm bg-green-500 py-2 text-center px-4 rounded-md text-white-500"
+                className={`text-sm py-2 text-white-500 text-center px-4 rounded-md ${
+                  cartList.some((item) => item.id === recipe.id)
+                    ? "bg-red-500 cursor-not-allowed"
+                    : "bg-green-500"
+                }`}
                 onClick={() => handleAddToCartRecipe(recipe.id)}
+                disabled={cartList.some((item) => item.id === recipe.id)}
               >
-                Add To Cart
+                {cartList.some((item) => item.id === recipe.id)
+                  ? "Added"
+                  : "Add To Cart"}
               </button>
+
               <button
                 className="text-sm bg-red-600 py-2 text-center px-4 rounded-md text-white-500"
                 onClick={() => handleRemoveRecipe(recipe.id)}

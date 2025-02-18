@@ -2,36 +2,42 @@ import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
-import { useSaladContext } from "../../SaladContextApi/SaladContext";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { SkeletonLoading } from "../../Common";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createRecipe,
+  increaseWeightOfItem,
+  removeItemFromRecipe,
+} from "../../../features/saladSlice";
 export const Extra = () => {
-  const { state, dispatch } = useSaladContext();
   const [loading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
+  const extraData = useSelector((state) => state.salad.extra);
+  const extra = useSelector((state) => state.salad.createRecipe[3].extra);
 
-  // console.log(state.createRecipe[3].extra);
 
   const handleExtraSelection = (id) => {
-    if (state.createRecipe[3].extra.find((item) => item.id === id)) {
-      dispatch({
-        type: "REMOVE_ITEM_FROM_RECIPE",
-        payload: { type: "extra", id: id },
-      });
+    if (extra.find((item) => item.id === id)) {
+      dispatch(
+        removeItemFromRecipe({
+          type: "extra",
+          id: id,
+        })
+      );
     } else {
-      const extraData = state.extra.find((i) => i.id === id);
-      dispatch({
-        type: "CREATE_RECIPE",
-        payload: { type: "EXTRA", data: extraData },
-      });
+      const data = extraData.find((i) => i.id === id);
+      if (data) {
+        dispatch(createRecipe({ type: "extra", data: data }));
+      }
     }
   };
   const handleWeight = (e, id) => {
     e.stopPropagation();
-    dispatch({
-      type: "INCREASEWEIGHT",
-      payload: { typeKey: "extra", id: id, weightChange: 250 }, // Increment weight by 250g
-    });
+    dispatch(
+      increaseWeightOfItem({ typeKey: "extra", id: id, weightChange: 250 })
+    );
   };
   return (
     <div className="my-8">
@@ -48,11 +54,11 @@ export const Extra = () => {
         </Link>
       </div>
       <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6  ">
-        {state.extra.slice(0, 4).map((item) => (
+        {extraData.slice(0, 4).map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
-                state.createRecipe[3].extra.some((i) => i.id === item.id)
+                extra.some((i) => i.id === item.id)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -108,15 +114,13 @@ export const Extra = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    state.createRecipe[3].extra.some((i) => i.id === item.id)
+                    extra.some((i) => i.id === item.id)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
                   onClick={() => handleExtraSelection(item.id)}
                 >
-                  {state.createRecipe[3].extra.some((i) => i.id === item.id)
-                    ? "Remove"
-                    : "Add"}
+                  {extra.some((i) => i.id === item.id) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

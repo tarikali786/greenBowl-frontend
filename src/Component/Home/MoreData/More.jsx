@@ -1,17 +1,25 @@
 import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
-import { useSaladContext } from "../../SaladContextApi/SaladContext";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SkeletonLoading } from "../../Common";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createRecipe,
+  increaseWeightOfItem,
+  removeItemFromRecipe,
+} from "../../../features/saladSlice";
 export const More = () => {
-  const { state, dispatch } = useSaladContext();
-  const [loading, setIsLoading] = useState(true);
-  const [count, setCount] = useState(0);
+  const dispatch = useDispatch();
   const { salad } = useParams();
-  const dynamicSalad = state[salad];
+  const [count, setCount] = useState(0);
+  const moreData = useSelector((state) => state.salad[salad]);
+  const dynamicCreateRecipe = useSelector(
+    (state) => state.salad.createRecipe[count][salad]
+  );
+
+  const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (salad == "base") {
@@ -26,33 +34,27 @@ export const More = () => {
       setCount(4);
     }
   }, [salad]);
-  const dynamicCreateRecipe = state.createRecipe[count][salad];
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   const handleItemSelection = (id) => {
     if (dynamicCreateRecipe.find((i) => i.id === id)) {
-      dispatch({
-        type: "REMOVE_ITEM_FROM_RECIPE",
-        payload: { type: salad, id: id },
-      });
+      dispatch(removeItemFromRecipe({ key: salad, id: id }));
     } else {
-      const Objectdata = dynamicSalad.find((i) => i.id === id);
+      const Objectdata = moreData.find((i) => i.id === id);
       if (Objectdata) {
-        dispatch({
-          type: "CREATE_RECIPE",
-          payload: { data: Objectdata, type: salad.toUpperCase() },
-        });
+        dispatch(createRecipe({ type: salad, data: Objectdata }));
       }
     }
   };
 
   const handleWeight = (e, id) => {
     e.stopPropagation();
-    dispatch({
-      type: "INCREASEWEIGHT",
-      payload: { typeKey: salad, id: id, weightChange: 250 },
-    });
+    dispatch(
+      increaseWeightOfItem({ typeKey: salad, id: id, weightChange: 250 })
+    );
   };
 
   return (
@@ -63,7 +65,7 @@ export const More = () => {
         </h3>
       </div>
       <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {dynamicSalad?.map((item) => (
+        {moreData?.map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`cursor-pointer rounded-lg shadow-lg  p-4 ${

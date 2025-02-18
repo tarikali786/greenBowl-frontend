@@ -1,17 +1,16 @@
 import Logo from "../../assets/Logo/Logo.png";
 import AccountCircleIcon from "../../assets/icon/user.png";
 import ShoppingCartIcon from "../../assets/icon/cart.png";
-import Recipe from "../../assets/icon/icons8-meal-100.png";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link } from "react-router-dom";
-import { useSaladContext } from "../SaladContextApi/SaladContext";
 import { Search } from "./Search";
 import { userData } from "../../Helper/Helper";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 export const Navbar = () => {
-  const { state } = useSaladContext();
   const { name, access_green } = userData();
   const [profileShow, setProfileShow] = useState(false);
+  const cart = useSelector((state) => state.salad.cart);
 
   const handleLagout = () => {
     localStorage.removeItem("user");
@@ -64,7 +63,7 @@ export const Navbar = () => {
           <div className="size-6 md:size-8 relative">
             <img src={ShoppingCartIcon} alt="" />
             <span className="absolute top-[-8px] right-[2px] size-5 text-sm bg-green-500 text-white-500 rounded-full  flex items-center justify-center">
-              {state.cart.length}
+              {cart.length}
             </span>
           </div>
           <span className="hidden md:block">Cart</span>

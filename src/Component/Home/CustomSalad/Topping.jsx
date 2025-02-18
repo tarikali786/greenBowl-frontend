@@ -5,33 +5,34 @@ import ToppingIocn from "../../../assets/icon/top.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { SkeletonLoading } from "../../Common";
-import { useSaladContext } from "../../SaladContextApi/SaladContext";
-
+import {
+  createRecipe,
+  increaseWeightOfItem,
+  removeItemFromRecipe,
+} from "../../../features/saladSlice";
+import { useDispatch, useSelector } from "react-redux";
 export const Topping = () => {
-  const { state, dispatch } = useSaladContext();
   const [loading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
+  const toppingData = useSelector((state) => state.salad.topping);
+  const topping = useSelector((state) => state.salad.createRecipe[1].topping);
 
   const handletToppingDataSelection = (id) => {
-    if (state.createRecipe[1].topping.find((i) => i.id === id)) {
-      dispatch({
-        type: "REMOVE_ITEM_FROM_RECIPE",
-        payload: { type: "topping", id: id },
-      });
+    if (topping.find((i) => i.id === id)) {
+      dispatch(removeItemFromRecipe({ type: "topping", id: id }));
     } else {
-      const ToppingData = state.topping.find((i) => i.id === id);
-      dispatch({
-        type: "CREATE_RECIPE",
-        payload: { type: "TOPPING", data: ToppingData },
-      });
+      const data = toppingData.find((i) => i.id === id);
+      if (data) {
+        dispatch(createRecipe({ type: "topping", data: data }));
+      }
     }
   };
 
   const handleWeight = (e, id) => {
     e.stopPropagation();
-    dispatch({
-      type: "INCREASEWEIGHT",
-      payload: { typeKey: "topping", id: id, weightChange: 250 }, // Increment weight by 250g
-    });
+    dispatch(
+      increaseWeightOfItem({ typeKey: "topping", id: id, weightChange: 250 })
+    );
   };
 
   return (
@@ -52,11 +53,11 @@ export const Topping = () => {
         </Link>
       </div>
       <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {state?.topping.slice(0, 4)?.map((item) => (
+        {toppingData.slice(0, 4)?.map((item) => (
           <div className="mt-8" key={item.id}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
-                state.createRecipe[1].topping.some((i) => i.id === item.id)
+                topping.some((i) => i.id === item.id)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -112,15 +113,13 @@ export const Topping = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    state.createRecipe[1].topping.some((i) => i.id === item.id)
+                    topping.some((i) => i.id === item.id)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
                   onClick={() => handletToppingDataSelection(item.id)}
                 >
-                  {state.createRecipe[1].topping.some((i) => i.id === item.id)
-                    ? "Remove"
-                    : "Add"}
+                  {topping.some((i) => i.id === item.id) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

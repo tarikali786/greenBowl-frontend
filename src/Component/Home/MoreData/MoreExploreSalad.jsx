@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { ExploreSaladData } from "../../Data/data";
 import StarsRoundedIcon from "@mui/icons-material/StarsRounded";
 import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import { useState } from "react";
 import { SkeletonLoading } from "../../Common";
+import { useSelector } from "react-redux";
 export const MoreExploreSalad = () => {
   const [loading, setIsLoading] = useState(true);
-
+  const exploreSaladData = useSelector((state) => state.salad.exploreData);
   return (
     <div className="px-4 md:px-14 lg:px-34 xl:px-44 py-6 ">
       <div className="flex justify-between items-center">
@@ -15,7 +15,7 @@ export const MoreExploreSalad = () => {
         </h1>
       </div>
       <div className="my-8 grid mm:grid-cols-2 lg:grid-cols-3  gap-8 ">
-        {ExploreSaladData?.map((item) => (
+        {exploreSaladData?.map((item) => (
           <div className="country-Card" key={item.id}>
             <Link
               to={`/exploreSalad/${item?.id}`}
@@ -37,7 +37,8 @@ export const MoreExploreSalad = () => {
                 {item.title}
               </p>
               <p className="text-[16px] font-semibold text-black-600 flex items-center gap-1">
-                <StarsRoundedIcon className="text-green-600 " /> {item?.rating || 4.7}{" "}
+                <StarsRoundedIcon className="text-green-600 " />{" "}
+                {item?.rating || 4.7}{" "}
                 <WhatshotRoundedIcon className="text-green-600 ml-2" />{" "}
                 {item?.calories}
               </p>

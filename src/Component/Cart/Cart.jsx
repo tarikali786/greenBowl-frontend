@@ -1,7 +1,12 @@
-import { useSaladContext } from "../SaladContextApi/SaladContext";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  removeRecipeFromCart,
+  saveOrderRecipeDetails,
+} from "../../features/saladSlice";
 export const Cart = () => {
-  const { state, dispatch } = useSaladContext();
+  const dispatch = useDispatch();
+  const cartList = useSelector((state) => state.salad.cart);
 
   // Function to calculate the total price of a recipe
   const calculateTotalPrice = (recipe) => {
@@ -31,23 +36,16 @@ export const Cart = () => {
   };
 
   const handleRemoveRecipe = (id) => {
-    dispatch({ type: "RemoveRecipeFromCart", payload: id });
+    dispatch(removeRecipeFromCart(id));
   };
 
   const handlePriceForOrder = (price, recipeName) => {
-    console.log(price, recipeName);
-    
-    dispatch({
-      type: "GetPriceForOrder",
-      payload: { price: price, recipeName: recipeName },
-    });
+    dispatch(saveOrderRecipeDetails({ price: price, recipeName: recipeName }));
   };
-
-
 
   return (
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 flex flex-col gap-y-4">
-      {state?.cart.length === 0 && (
+      {cartList.length === 0 && (
         <div className="flex flex-col gap-10 my-20">
           <p className="text-center text-gray-500 text-lg mt-6">
             Your cart is empty! Add some delicious salad recipes to enjoy.
@@ -64,7 +62,7 @@ export const Cart = () => {
         </div>
       )}
 
-      {state?.cart.map((recipe, recipeIndex) => (
+      {cartList.map((recipe, recipeIndex) => (
         <div
           className="flex gap-8 border-b border-white-200 pb-4"
           key={recipeIndex}
@@ -143,11 +141,11 @@ export const Cart = () => {
             <div className="flex gap-6 mt-5">
               <Link
                 to="/order"
-                className="text-sm bg-green-500 py-2 text-center px-4 rounded-md text-white-500"
+                className={`text-sm bg-green-500 py-2 text-center px-4 rounded-md text-white-500 `}
                 onClick={() =>
                   handlePriceForOrder(
                     calculateTotalPrice(recipe),
-                    recipe[5]?.recipeName
+                    recipe?.recipeName
                   )
                 }
               >

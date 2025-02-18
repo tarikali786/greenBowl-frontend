@@ -1,42 +1,37 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { SkeletonLoading } from "../Common";
-import { useSaladContext } from "../SaladContextApi/SaladContext";
-
+import { useDispatch, useSelector } from "react-redux";
+import { removeItemFromRecipe, saveRecipe } from "../../features/saladSlice";
 export const SaladList = () => {
   const [showCard, setShowCard] = useState(true);
-  const { state, dispatch } = useSaladContext();
+  const dispatch = useDispatch();
+  const createRecipeData = useSelector((state) => state?.salad?.createRecipe);
+  const recipeCount = useSelector((state) => state.salad.recipe);
   const [recipeName, setRecipeName] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const hasData = state.createRecipe.some((section) =>
+    const hasData = createRecipeData.some((section) =>
       Object.values(section).some(
         (items) => Array.isArray(items) && items.length > 0
       )
     );
     setShowCard(hasData);
-  }, [state.createRecipe]);
-
-  useEffect(() => {
-    setRecipeName(`Recipe${state.recipe.length}`);
-  }, [state.recipe]);
+    setRecipeName(`Recipe${recipeCount.length}`);
+  }, [createRecipeData, recipeCount]);
 
   const handleSaveRecipe = () => {
-    const updatedCreateRecipe = [...state.createRecipe];
-    updatedCreateRecipe[5].recipeName = recipeName;
-
-    dispatch({
-      type: "SAVE_RECIPE",
-      payload: { ...updatedCreateRecipe },
-    });
+    dispatch(saveRecipe({ recipeName: recipeName, data: createRecipeData }));
   };
 
   const handleRemoveItem = (type, id) => {
-    dispatch({
-      type: "REMOVE_ITEM_FROM_RECIPE",
-      payload: { type, id },
-    });
+    dispatch(
+      removeItemFromRecipe({
+        type: type,
+        id: id,
+      })
+    );
   };
 
   const renderItems = (type, items) => {
@@ -85,7 +80,7 @@ export const SaladList = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-3 mt-4 max-h-[30vh] overflow-y-auto">
-          {state.createRecipe.map((section) => {
+          {createRecipeData.map((section) => {
             const [type, items] = Object.entries(section)[0];
             return renderItems(type, items); // Safely pass `items`
           })}
