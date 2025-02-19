@@ -1,6 +1,5 @@
-import  { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import { useSaladContext } from "../SaladContextApi/SaladContext";
 import { ExploreSaladData, PopularSaladData } from "../Data/data";
 import { Link } from "react-router-dom";
 
@@ -8,7 +7,6 @@ export const Search = () => {
   const [searchValue, setSearchValue] = useState("");
   const [recipeList, setRecipeList] = useState([]);
   const [itemListShow, setItemListShow] = useState(false);
-  const { state } = useSaladContext();
   const handleOnchange = (e) => {
     setSearchValue(e.target.value);
   };
@@ -22,7 +20,7 @@ export const Search = () => {
     return allSalads
       .filter((salad) => salad?.title?.toLowerCase().includes(lowercasedSearch))
       .slice(0, 6);
-  }, [state, searchValue]);
+  }, [searchValue]);
 
   return (
     <div

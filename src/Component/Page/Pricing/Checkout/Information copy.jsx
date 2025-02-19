@@ -5,13 +5,13 @@ import "./style.css";
 import { Autocomplete } from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useSaladContext } from "../../../SaladContextApi";
+import { useSelector } from "react-redux";
 
 export const Information = memo(
   ({ settabValue, setCheckInfo, setPaymentIntentid }) => {
     const [loading, setLoading] = useState(false);
     const [states, setStates] = useState([]);
-    const { price } = useSaladContext();
+    const price = useSelector((state) => state.salad.orderDetails.price);
 
     const [userInfo, setUserInfo] = useState({
       email: "",

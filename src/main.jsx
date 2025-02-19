@@ -3,17 +3,14 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
-import { SaladProvider } from "./Component/index.js";
 import { Provider } from "react-redux";
 import { store } from "./store/store.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <SaladProvider>
-      <BrowserRouter>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </BrowserRouter>
-    </SaladProvider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </StrictMode>
 );

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Information } from "./Information";
 import { Payment } from "./Payment";
 import { Tab } from "./Tab";
-import { useSaladContext } from "../../../SaladContextApi/SaladContext";
 
 export const PriceCart = () => {
   const [tabvalue, settabValue] = useState("1");

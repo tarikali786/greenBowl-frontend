@@ -2,11 +2,11 @@ import { memo, useEffect, useState } from "react";
 import "./style.css";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
-import { useSaladContext } from "../../../SaladContextApi";
 import { get, post, remove } from "../../../../servic";
 import { userData } from "../../../../Helper/Helper";
 import { AddressForm } from "./AddressForm";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 export const Information = memo(
   ({ settabValue, setCheckInfo, setPaymentIntentid }) => {
@@ -16,7 +16,7 @@ export const Information = memo(
     const [loading, setLoading] = useState(false);
     const [loading1, setLoading1] = useState(false);
     const [addAddress, setAddAddress] = useState(false);
-    const { state } = useSaladContext();
+    const price = useSelector((state) => state.salad.orderDetails.price);
     const headers = {
       Authorization: `Bearer ${access_green}`,
       "Content-Type": "application/json",
@@ -48,7 +48,6 @@ export const Information = memo(
       }
     };
 
-   
     useEffect(() => {
       fetchUserAddressList();
     }, []);
@@ -59,7 +58,7 @@ export const Information = memo(
 
     const handleContinue = async () => {
       const data = {
-        amount: state?.price * 100,
+        amount: price * 100,
         address: {
           line1: selectAddress?.street_address,
           city: selectAddress?.city,
