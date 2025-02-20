@@ -5,3 +5,4 @@ export * from "./RecipeList";
 export * from "./Cart";
 export * from "./Page";
 export * from "./Model";
+export * from "./OrderItem";

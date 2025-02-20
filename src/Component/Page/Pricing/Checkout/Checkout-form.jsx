@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { saveOderItem } from "../../../../features/saladSlice";
 export const CheckoutForm = ({ paymentIntentId }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("");
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const orderDetails = useSelector((state) => state.salad.orderDetails.id);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,6 +38,9 @@ export const CheckoutForm = ({ paymentIntentId }) => {
         toast.error(`Payment failed: ${error.message}`);
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
         toast.success("Payment successful!");
+        dispatch(saveOderItem(orderDetails));
+        navigate("/");
+
         console.log("PaymentIntent:", paymentIntent);
       }
     } catch (err) {

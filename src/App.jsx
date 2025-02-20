@@ -8,6 +8,8 @@ import {
   More,
   MoreExploreSalad,
   MorePopuralSalad,
+  Order,
+  OrderDetails,
   PriceCart,
   ProfileLayout,
   PuporalDetail,
@@ -26,7 +28,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="recipe-list" element={<Recipe />} />
           <Route path="cart" element={<Cart />} />
-          <Route path="order" element={<PriceCart />} />
+          <Route path="order" element={<Order />} />
+          <Route path="order-details/:id" element={<OrderDetails />} />
+          <Route path="checkout" element={<PriceCart />} />
           <Route path="recepi/:salad" element={<More />} />
           <Route path="popuralSalad" element={<MorePopuralSalad />} />
           <Route path="popuralSalad/:id" element={<PuporalDetail />} />

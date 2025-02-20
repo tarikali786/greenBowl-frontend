@@ -38,10 +38,15 @@ export const Navbar = () => {
                 <Link to="/profile" className="px-3 py-1 hover:bg-green-100 ">
                   Profile
                 </Link>
-                <Link className="px-3 py-1 hover:bg-green-100 md:hidden block">
+                <Link
+                  to="/recipe-list"
+                  className="px-3 py-1 hover:bg-green-100 md:hidden block"
+                >
                   Recipe
                 </Link>
-                <Link className="px-3 py-1 hover:bg-green-100 ">Order</Link>
+                <Link to="/order" className="px-3 py-1 hover:bg-green-100 ">
+                  Order
+                </Link>
                 <Link
                   className="px-3 py-1 hover:bg-green-100 pb-2"
                   onClick={handleLagout}

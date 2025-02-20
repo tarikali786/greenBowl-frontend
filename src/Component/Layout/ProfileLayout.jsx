@@ -6,7 +6,7 @@ export const ProfileLayout = () => {
   return (
     <>
       <Navbar />
-      <Sidebar />
+      {/* <Sidebar /> */}
       <Outlet />
       <Footer />
     </>

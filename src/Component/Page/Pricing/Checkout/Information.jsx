@@ -22,6 +22,8 @@ export const Information = memo(
       "Content-Type": "application/json",
     };
 
+console.log(price);
+
     const fetchUserAddressList = async () => {
       try {
         setLoading(true);

@@ -4,9 +4,9 @@ import {
   removeRecipeFromCart,
   saveOrderRecipeDetails,
 } from "../../features/saladSlice";
-export const Cart = () => {
+export const Order = () => {
   const dispatch = useDispatch();
-  const cartList = useSelector((state) => state.salad.cart);
+  const OrderList = useSelector((state) => state?.salad?.OrderItem);
 
   // Function to calculate the total price of a recipe
   const calculateTotalPrice = (recipe) => {
@@ -39,22 +39,17 @@ export const Cart = () => {
     dispatch(removeRecipeFromCart(id));
   };
 
-  const handlePriceForOrder = (price, recipeName, id) => {
-    dispatch(
-      saveOrderRecipeDetails({
-        price: price || 250,
-        recipeName: recipeName,
-        id: id,
-      })
-    );
+  const handlePriceForOrder = (price, recipeName) => {
+    dispatch(saveOrderRecipeDetails({ price: price, recipeName: recipeName }));
   };
 
   return (
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 flex flex-col gap-y-4">
-      {cartList.length === 0 && (
+      {OrderList.length === 0 && (
         <div className="flex flex-col gap-10 my-20">
           <p className="text-center text-gray-500 text-lg mt-6">
-            Your cart is empty! Add some delicious salad recipes to enjoy.
+            Your order is empty! Add some delicious salads and enjoy a healthy
+            meal.
           </p>
 
           <div className=" m-auto">
@@ -68,7 +63,7 @@ export const Cart = () => {
         </div>
       )}
 
-      {cartList.map((recipe, recipeIndex) => (
+      {OrderList?.map((recipe, recipeIndex) => (
         <div
           className="flex gap-8 border-b border-white-200 pb-4"
           key={recipeIndex}
@@ -134,7 +129,7 @@ export const Cart = () => {
               </p>
             )}
 
-            {recipe.calories ? (
+            {recipe.price ? (
               <p className="text-black-600">
                 Total Calories: <strong> {recipe?.calories}</strong>
               </p>
@@ -145,41 +140,18 @@ export const Cart = () => {
               </p>
             )}
             <div className="flex gap-6 mt-5">
-              {recipe.price ? (
-                <Link
-                  to="/checkout"
-                  className={`text-sm bg-green-500 py-2 text-center px-4 rounded-md text-white-500 `}
-                  onClick={() =>
-                    handlePriceForOrder(
-                      recipe?.price,
-                      recipe?.recipeName,
-                      recipe?.id
-                    )
-                  }
-                >
-                  Order
-                </Link>
-              ) : (
-                <Link
-                  to="/checkout"
-                  className={`text-sm bg-green-500 py-2 text-center px-4 rounded-md text-white-500 `}
-                  onClick={() =>
-                    handlePriceForOrder(
-                      calculateTotalPrice(recipe),
-                      recipe?.recipeName,
-                      recipe?.id
-                    )
-                  }
-                >
-                  Order
-                </Link>
-              )}
-              <button
-                className="text-sm bg-red-600 py-2 text-center px-4 rounded-md text-white-500"
-                onClick={() => handleRemoveRecipe(recipe.id)}
+              <Link
+                to={`/order-details/${recipe?.id}`}
+                className={`text-sm bg-green-500 py-2 text-center px-4 rounded-md text-white-500 `}
+                onClick={() =>
+                  handlePriceForOrder(
+                    calculateTotalPrice(recipe),
+                    recipe?.recipeName
+                  )
+                }
               >
-                Remove
-              </button>
+                Details
+              </Link>
             </div>
           </div>
         </div>

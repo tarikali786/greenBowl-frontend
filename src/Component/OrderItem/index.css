@@ -1,0 +1,40 @@
+.rightCard,
+.CenterCard {
+  position: relative;
+}
+
+.CenterCard::before {
+  content: "";
+  position: absolute;
+  left: -3rem;
+  border-top: 2px solid #565353;
+  width: 48px;
+  top: 50%;
+}
+
+.rightCard::after,
+.CenterCard::after {
+  content: "";
+  position: absolute;
+  right: -3rem;
+  border-top: 2px solid #565353;
+  width: 48px;
+  top: 50%;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 767px) {
+  .rightCard::after,
+  .CenterCard::after,
+  .CenterCard::before {
+    display: none; /* Hide connecting lines on mobile */
+  }
+
+  .flex-col {
+    flex-direction: column;
+  }
+
+  .space-y-4 > * + * {
+    margin-top: 1rem; /* Add vertical spacing between steps on mobile */
+  }
+}

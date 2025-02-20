@@ -23,7 +23,9 @@ const initialState = {
   orderDetails: {
     price: "",
     recipeName: "",
+    id: "",
   },
+  OrderItem: [],
   createRecipe: [
     { base: [] },
     { topping: [] },
@@ -111,6 +113,13 @@ export const saladSlice = createSlice({
     saveOrderRecipeDetails: (state, action) => {
       state.orderDetails.price = action.payload.price;
       state.orderDetails.recipeName = action.payload.recipeName;
+      state.orderDetails.id = action.payload.id;
+    },
+
+    saveOderItem: (state, action) => {
+      const item = state.cart.filter((item) => item.id === action.payload);
+      state.OrderItem.push(item[0]);
+      state.cart = state.cart.filter((item) => item.id !== action.payload);
     },
   },
 });
@@ -123,7 +132,8 @@ export const {
   addRecipeTocart,
   removeRecipeFromCart,
   increaseWeightOfItem,
-  saveOrderRecipeDetails
+  saveOrderRecipeDetails,
+  saveOderItem,
 } = saladSlice.actions;
 
 export default saladSlice.reducer;
