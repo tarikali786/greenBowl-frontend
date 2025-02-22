@@ -117,7 +117,8 @@ export const Cart = () => {
                       <div key={itemIndex}>
                         {item.name}
                         {recipe[categoryIndex]?.[category]?.length > 1 && ","}
-                      </div>
+                      </div>   
+                      
                     ))
                 )}
               </div>
