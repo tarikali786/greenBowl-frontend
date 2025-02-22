@@ -2,8 +2,6 @@ import WhatshotRoundedIcon from "@mui/icons-material/WhatshotRounded";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { SkeletonLoading } from "../../Common";
 import DressingIocn from "../../../assets/icon/dress.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,8 +9,8 @@ import {
   increaseWeightOfItem,
   removeItemFromRecipe,
 } from "../../../features/saladSlice";
+import ImageComponent from "../../Common/ImageComponent";
 export const Dressing = () => {
-  const [loading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const dressingData = useSelector((state) => state.salad.dressing);
   const dressing = useSelector((state) => state.salad.createRecipe[2].dressing);
@@ -71,19 +69,15 @@ export const Dressing = () => {
                   : ""
               }`}
             >
-              <div className="w-full h-[22vh] md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
-                {loading && <SkeletonLoading />}
-                <img
-                  src={item.img}
-                  alt=""
-                  loading="lazy"
-                  className="object-cover"
-                  onLoad={() => setIsLoading(false)}
-                />
-              </div>
+              <ImageComponent
+                variant="rounded"
+                src={item.image}
+                imgCss="object-cover "
+                cardCss="w-full h-[22vh] md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden"
+              />
               <div className="flex items-center justify-between my-2">
                 <p className="text-[18px] font-semibold text-black-600 mt-1">
-                  {item.title}
+                  {item.name}
                 </p>
                 <div className="flex items-center gap-2">
                   <ScaleRoundedIcon className="text-green-600" />

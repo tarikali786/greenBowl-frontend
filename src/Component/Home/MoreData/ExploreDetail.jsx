@@ -3,13 +3,13 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { SkeletonLoading } from "../../Common";
 import StarsIcon from "@mui/icons-material/Stars";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addRecipeTocart,
   removeRecipeFromCart,
 } from "../../../features/saladSlice";
+import ImageComponent from "../../Common/ImageComponent";
 export const ExploreDetail = () => {
   const dispatch = useDispatch();
   const exploreData = useSelector((state) => state?.salad?.exploreData);
@@ -17,14 +17,13 @@ export const ExploreDetail = () => {
 
   const { id } = useParams();
   const [details, setDetails] = useState([]);
-  const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    const filterData = exploreData?.filter((item) => item.id == id);
+    const filterData = exploreData?.filter((item) => item.uid == id);
     setDetails(filterData[0]);
   }, [id]);
 
@@ -41,16 +40,14 @@ export const ExploreDetail = () => {
 
   return (
     <div className="px-4 md:px-14 lg:px-24 xl:px-44 my-8">
-      <div className="w-full md:h-[50vh] h-[40vh] overflow-hidden rounded-xl">
-        <img
-          src={`${import.meta.env.VITE_IMAGE_URL}/${details.img}`}
-          alt=""
-          className=" object-cover rounded-lg  "
-        />
-      </div>
+      <ImageComponent
+        src={details.image}
+        cardCss="w-full md:h-[50vh] h-[40vh] overflow-hidden rounded-xl"
+        imgCss=" object-cover rounded-lg  "
+      />
       <div className="flex justify-between  items-center gap-5 mt-6">
         <h3 className="text-2xl mt-4 font-semibold text-black-600">
-          {details?.title}
+          {details?.name}
         </h3>
         {cartData.find((item) => item.id === details.id) ? (
           <div
@@ -98,20 +95,14 @@ export const ExploreDetail = () => {
         {details?.ingredients?.map((item) => (
           <div className="mt-4" key={item.id}>
             <div className={` rounded-lg shadow-lg  p-4 `} key={item.id}>
-              <div className="w-full  h-[22vh]  md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
-                {loading && <SkeletonLoading />}
-
-                <img
-                  src={item.img}
-                  alt=""
-                  loading="lazy"
-                  className="object-cover"
-                  onLoad={() => setIsLoading(false)}
-                />
-              </div>
+              <ImageComponent
+                src={item.image}
+                cardCss="w-full  h-[22vh]  md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden"
+                imgCss="object-cover"
+              />
               <div className="flex items-center justify-between my-2">
                 <p className="text-[18px] font-semibold text-black-600 mt-1">
-                  {item.title}
+                  {item.name}
                 </p>
                 <div>
                   <p>
@@ -120,7 +111,6 @@ export const ExploreDetail = () => {
                   </p>
                 </div>
               </div>
-
               <div className="text-[16px] font-semibold text-black-600 flex items-center justify-between gap-1 my-2">
                 <p>
                   <CurrencyRupeeRoundedIcon className="text-green-600 " />{" "}

@@ -1,25 +1,18 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
-import {
-  CustomBaseData,
-  CustomDressingsData,
-  CustomExtrasData,
-  CustomToppingsData,
-  CustomVegetablesdata,
-  ExploreSaladData,
-  PopularSaladData,
-} from "../Component/Data/data";
+import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
-  base: CustomBaseData || [],
-  topping: CustomToppingsData || [],
-  dressing: CustomDressingsData || [],
-  vegetable: CustomVegetablesdata || [],
-  extra: CustomExtrasData || [],
-  exploreData: ExploreSaladData || [],
-  popularData: PopularSaladData || [],
+  base: [],
+  topping: [],
+  dressing: [],
+  vegetable: [],
+  extra: [],
+  exploreData: [],
+  popularData: [],
+  loading: false,
+  error: "",
   recipe: [],
   cart: [],
-  price: 220,
   orderDetails: {
     price: "",
     recipeName: "",
@@ -35,6 +28,15 @@ const initialState = {
   ],
   searchItem: {},
 };
+
+export const fetchHomePageData = createAsyncThunk(
+  "salad/fetchHomePageData",
+  async () => {
+    const api = `${import.meta.env.VITE_API_URL}/salad/home-salad/`;
+    const response = await axios.get(api);
+    return response.data;
+  }
+);
 
 export const saladSlice = createSlice({
   name: "salad",
@@ -121,6 +123,25 @@ export const saladSlice = createSlice({
       state.OrderItem.push(item[0]);
       state.cart = state.cart.filter((item) => item.id !== action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchHomePageData.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchHomePageData.fulfilled, (state, action) => {
+      state.loading = false;
+      state.exploreData = action.payload.most_loved_salads;
+      state.popularData = action.payload.popular_salads;
+      state.base = action.payload.base_ingredients;
+      state.dressing = action.payload.dressing_ingredients;
+      state.extra = action.payload.extra_ingredients;
+      state.topping = action.payload.topping_ingredients;
+      state.vegetable = action.payload.vegetable_ingredients;
+    });
+    builder.addCase(fetchHomePageData.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
   },
 });
 

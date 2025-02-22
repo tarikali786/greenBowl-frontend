@@ -3,6 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import the default CSS
 import { HomeHeroData } from "../Data/data";
 import { SkeletonLoading } from "../Common";
+import ImageComponent from "../Common/ImageComponent";
 
 export const Hero = () => {
   const [loading, setIsLoading] = useState(true);

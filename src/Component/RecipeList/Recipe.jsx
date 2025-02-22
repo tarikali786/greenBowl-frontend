@@ -4,10 +4,13 @@ import {
   addRecipeTocart,
   removeRecipeFromList,
 } from "../../features/saladSlice";
+import ImageComponent from "../Common/ImageComponent";
 export const Recipe = () => {
   const dispatch = useDispatch();
   const recipeList = useSelector((state) => state.salad.recipe);
   const cartList = useSelector((state) => state.salad.cart);
+
+  console.log(recipeList);
 
   // Function to calculate the total price of a recipe
   const calculateTotalPrice = (recipe) => {
@@ -71,20 +74,19 @@ export const Recipe = () => {
 
       {recipeList.map((recipe) => (
         <div
-          className="flex gap-8 border-b border-white-200 pb-4"
-          key={recipe?.id}
+          className="flex  flex-wrap sm:flex-nowrap gap-8 border-b border-white-200 pb-4"
+          key={recipe?.uid}
         >
           <div className="w-60 h-40 border flex flex-wrap justify-start overflow-y-auto rounded">
             {["base", "topping", "dressing", "extra", "vegetable"].map(
               (category, index) =>
                 recipe[index]?.[category]?.length > 0 &&
                 recipe[index]?.[category].map((item) => (
-                  <div className="h-16 shadow-lg" key={item.id}>
-                    <img
-                      src={`${import.meta.env.VITE_IMAGE_URL}/${item.img}`}
-                      alt={item.title}
-                    />
-                  </div>
+                  <ImageComponent
+                    key={item.uid}
+                    src={item.image}
+                    cardCss="h-16 shadow-lg"
+                  />
                 ))
             )}
           </div>
@@ -94,13 +96,16 @@ export const Recipe = () => {
               {recipe?.recipeName}
             </h1>
 
-            <div className="flex gap-1">
+            <div className="flex gap-1 flex-wrap">
               {["base", "topping", "dressing", "extra", "vegetable"].map(
                 (category, categoryIndex) =>
                   recipe[categoryIndex]?.[category]?.length > 0 &&
                   recipe[categoryIndex]?.[category].map((item, itemIndex) => (
-                    <div key={itemIndex}>
-                      {item.title}
+                    <div
+                      key={itemIndex}
+                      className="flex flex-wrap gap-1 font-semibold"
+                    >
+                      {item.name}
                       {recipe[categoryIndex]?.[category]?.length > 1 && ","}
                     </div>
                   ))
@@ -124,7 +129,7 @@ export const Recipe = () => {
                 onClick={() => handleAddToCartRecipe(recipe.id)}
                 disabled={cartList.some((item) => item.id === recipe.id)}
               >
-                {cartList.some((item) => item.id === recipe.id)
+                {cartList.some((item) => item.uid === recipe.uid)
                   ? "Added"
                   : "Add To Cart"}
               </button>

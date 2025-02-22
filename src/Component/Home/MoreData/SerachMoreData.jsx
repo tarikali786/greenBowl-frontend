@@ -3,25 +3,25 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { SkeletonLoading } from "../../Common";
-import { ExploreSaladData, PopularSaladData } from "../../Data/data";
 import StarsIcon from "@mui/icons-material/Stars";
 import { useDispatch, useSelector } from "react-redux";
 import { addRecipeTocart } from "../../../features/saladSlice";
+import ImageComponent from "../../Common/ImageComponent";
 export const SearcMoreDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [details, setDetails] = useState([]);
-  const [loading, setIsLoading] = useState(true);
   const cartList = useSelector((state) => state.salad.cart);
+  const { exploreData, popularData } = useSelector((state) => state.salad);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const searchData = [...ExploreSaladData, ...PopularSaladData];
+  const searchData = [...exploreData, ...popularData];
 
   useEffect(() => {
-    const filterData = searchData?.filter((item) => item.id == id);
+    const filterData = searchData?.filter((item) => item.uid == id);
     setDetails(filterData[0]);
   }, [id]);
 
@@ -33,16 +33,15 @@ export const SearcMoreDetails = () => {
 
   return (
     <div className="px-4 md:px-14 lg:px-24 xl:px-44 my-8">
-      <div className="w-full md:h-[50vh] h-[40vh] overflow-hidden rounded-xl">
-        <img
-          src={`${import.meta.env.VITE_IMAGE_URL}/${details.img}`}
-          alt=""
-          className=" object-cover rounded-lg  "
-        />
-      </div>
+      <ImageComponent
+        src={details.image}
+        cardCss="w-full md:h-[50vh] h-[40vh] overflow-hidden rounded-xl"
+        imgCss=" object-cover rounded-lg  "
+      />
+
       <div className="flex justify-between  items-center gap-5 mt-6">
         <h3 className="text-2xl mt-4 font-semibold text-black-600">
-          {details?.title}
+          {details?.name}
         </h3>
 
         {cartList.find((item) => item.id === details.id) ? (
@@ -91,20 +90,14 @@ export const SearcMoreDetails = () => {
         {details?.ingredients?.map((item) => (
           <div className="mt-4" key={item.id}>
             <div className={` rounded-lg shadow-lg  p-4 `} key={item.id}>
-              <div className="w-full  h-[22vh]  md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
-                {loading && <SkeletonLoading />}
-
-                <img
-                  src={item.img}
-                  alt=""
-                  loading="lazy"
-                  className="object-cover"
-                  onLoad={() => setIsLoading(false)}
-                />
-              </div>
+              <ImageComponent
+                src={item?.image}
+                cardCss="w-full  h-[22vh]  md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden"
+                imgCss=" object-cover   "
+              />
               <div className="flex items-center justify-between my-2">
                 <p className="text-[18px] font-semibold text-black-600 mt-1">
-                  {item.title}
+                  {item.name}
                 </p>
                 <div>
                   <p>

@@ -27,25 +27,11 @@ export const Profile = () => {
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg mt-10">
       {/* User Info */}
       <div className="flex items-center space-x-6">
-        <Avatar
-          alt={user.name}
-          src="https://i.pravatar.cc/100"
-          sx={{ width: 80, height: 80 }}
-        />
         <div>
           <h1 className="text-2xl font-bold text-green-700">{user.name}</h1>
-          <p className="text-gray-600 flex items-center">
-            {/* <Mail className="w-4 h-4 mr-2 text-green-600" /> */}
-            {user.email}
-          </p>
-          <p className="text-gray-600 flex items-center">
-            {/* <Phone className="w-4 h-4 mr-2 text-green-600" /> */}
-            {user.phone}
-          </p>
-          <p className="text-gray-600 flex items-center">
-            {/* <MapPin className="w-4 h-4 mr-2 text-green-600" /> */}
-            {user.address}
-          </p>
+          <p className="text-gray-600 flex items-center">{user.email}</p>
+          <p className="text-gray-600 flex items-center">{user.phone}</p>
+          <p className="text-gray-600 flex items-center">{user.address}</p>
         </div>
       </div>
 
@@ -56,7 +42,7 @@ export const Profile = () => {
           {user.orders.map((order) => (
             <div
               key={order.id}
-              className="p-4 bg-gray-100 rounded-lg flex justify-between items-center"
+              className="p-4 bg-gray-100  flex justify-between items-center border-b border-black-100 "
             >
               <div>
                 <p className="text-lg font-medium text-gray-800">

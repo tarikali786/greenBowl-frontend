@@ -6,6 +6,7 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import "./index.css";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import ImageComponent from "../Common/ImageComponent";
 export const OrderDetails = () => {
   const steps = ["Order Placed", "Preparing ", "Out for Delivery", "Delivered"];
   const currentStatus = "Out for Delivery";
@@ -35,7 +36,7 @@ export const OrderDetails = () => {
         <h1 className="text-xl md:text-2xl font-bold">Order Details</h1>
       </div>
       <p className=" mt-2 text-black-600">
-        <b>Order ID</b>: {OrderDetails?.id}
+        <b>Order ID</b>: {OrderDetails?.uid}
       </p>
       <p className=" mt-2 text-black-600">
         <b>Recipe Name</b>: {OrderDetails?.recipeName || OrderDetails?.title}
@@ -72,14 +73,12 @@ export const OrderDetails = () => {
             OrderDetails?.ingredients?.map((item) => (
               <div className="mt-8" key={item.id}>
                 <div className={`rounded-lg shadow-lg p-4`}>
-                  <div className="w-full h-[22vh] md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
-                    <img
-                      src={item.img}
-                      alt=""
-                      loading="lazy"
-                      className="object-cover"
-                    />
-                  </div>
+                  <ImageComponent
+                    key={item.id}
+                    src={item?.image}
+                    imgCss={"object-cover"}
+                    cardCss="w-full h-[22vh] md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden"
+                  />
                   <div className="flex items-center justify-between my-2">
                     <p className="text-[18px] font-semibold text-black-600 mt-1">
                       {item.title}
@@ -124,14 +123,12 @@ export const OrderDetails = () => {
                 ? items.map((item) => (
                     <div className="mt-8" key={item.id}>
                       <div className="rounded-lg shadow-lg p-4">
-                        <div className="w-full h-[22vh] md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
-                          <img
-                            src={item.img}
-                            alt={item.title}
-                            loading="lazy"
-                            className="object-cover"
-                          />
-                        </div>
+                        <ImageComponent
+                          key={item.id}
+                          src={item?.image}
+                          imgCss={"object-cover"}
+                          cardCss="w-full h-[22vh] md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden"
+                        />
                         <div className="flex items-center justify-between my-2">
                           <p className="text-[18px] font-semibold text-black-600 mt-1">
                             {item.title}

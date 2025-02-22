@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { SkeletonLoading } from "../Common";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItemFromRecipe, saveRecipe } from "../../features/saladSlice";
+import ImageComponent from "../Common/ImageComponent";
 export const SaladList = () => {
   const [showCard, setShowCard] = useState(true);
   const dispatch = useDispatch();
   const createRecipeData = useSelector((state) => state?.salad?.createRecipe);
   const recipeCount = useSelector((state) => state.salad.recipe);
   const [recipeName, setRecipeName] = useState("");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const hasData = createRecipeData.some((section) =>
@@ -42,18 +41,14 @@ export const SaladList = () => {
         className="shadow-lg px-1 cursor-pointer"
         onClick={() => handleRemoveItem(type.toUpperCase(), item.id)}
       >
-        <div className="w-auto h-12">
-          {loading && <SkeletonLoading />}
-          <img
-            src={`${import.meta.env.VITE_IMAGE_URL}/${item.img}`}
-            alt={item.title}
-            className="object-cover rounded-md"
-            onLoad={() => setLoading(false)}
-          />
-        </div>
+        <ImageComponent
+          src={item.image}
+          cardCss="w-auto h-12"
+          imgCss="object-cover rounded-md"
+        />
         <p className="flex justify-between gap-2 mt-1">
-          <span className="text-[12px] text-black-200 line-clamp-1">
-            {item.title}
+          <span className="text-[12px]  text-black-200 line-clamp-1">
+            {item.name}
           </span>
           <span className="text-[12px] text-black-300">{item.price}</span>
         </p>
@@ -82,7 +77,7 @@ export const SaladList = () => {
         <div className="grid grid-cols-3 gap-3 mt-4 max-h-[30vh] overflow-y-auto">
           {createRecipeData.map((section) => {
             const [type, items] = Object.entries(section)[0];
-            return renderItems(type, items); // Safely pass `items`
+            return renderItems(type, items);
           })}
         </div>
 

@@ -4,11 +4,11 @@ import {
   removeRecipeFromCart,
   saveOrderRecipeDetails,
 } from "../../features/saladSlice";
+import ImageComponent from "../Common/ImageComponent";
 export const Cart = () => {
   const dispatch = useDispatch();
   const cartList = useSelector((state) => state.salad.cart);
 
-  // Function to calculate the total price of a recipe
   const calculateTotalPrice = (recipe) => {
     const categories = ["base", "topping", "dressing", "extra", "vegetable"];
     return categories.reduce((total, category, index) => {
@@ -21,7 +21,6 @@ export const Cart = () => {
       return total;
     }, 0);
   };
-  // Function to calculate the total calories of a recipe
   const calculateTotalCalories = (recipe) => {
     const categories = ["base", "topping", "dressing", "extra", "vegetable"];
     return categories.reduce((total, category, index) => {
@@ -48,6 +47,7 @@ export const Cart = () => {
       })
     );
   };
+  console.log(cartList);
 
   return (
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 flex flex-col gap-y-4">
@@ -70,53 +70,52 @@ export const Cart = () => {
 
       {cartList.map((recipe, recipeIndex) => (
         <div
-          className="flex gap-8 border-b border-white-200 pb-4"
+          className="flex flex-wrap sm:flex-nowrap gap-8 border-b border-white-200 pb-4"
           key={recipeIndex}
         >
           <div className="w-60 h-40 border flex flex-wrap justify-start overflow-y-auto rounded">
-            {["base", "topping", "dressing", "extra", "vegetable"].map(
-              (category, index) =>
-                recipe[index]?.[category]?.length > 0 &&
-                recipe[index]?.[category].map((item) => (
-                  <div className="h-16 shadow-lg" key={item.id}>
-                    <img
-                      src={`${import.meta.env.VITE_IMAGE_URL}/${item.img}`}
-                      alt={item.title}
+            {recipe?.image ? (
+              <ImageComponent
+                key={recipe.uid}
+                cardCss="shadow-lg"
+                src={recipe?.image}
+              />
+            ) : (
+              ["base", "topping", "dressing", "extra", "vegetable"].map(
+                (category, index) =>
+                  recipe[index]?.[category]?.length > 0 &&
+                  recipe[index]?.[category].map((item) => (
+                    <ImageComponent
+                      key={item.uid}
+                      cardCss="h-16 shadow-lg"
+                      src={item.image}
                     />
-                  </div>
-                ))
-            )}
-            {recipe.img && (
-              <div className=" shadow-lg" key={recipeIndex}>
-                <img
-                  src={`${import.meta.env.VITE_IMAGE_URL}/${recipe.img}`}
-                  alt={recipe.title}
-                />
-              </div>
+                  ))
+              )
             )}
           </div>
           <div>
             <h1 className="text-lg font-semibold text-black-600">
-              {recipe[5]?.recipeName || recipe?.title}
+              {recipe?.name || recipe?.recipeName}
             </h1>
 
             {recipe?.ingredients ? (
-              <div className="flex gap-1">
+              <div className="flex flex-wrap gap-1">
                 {recipe?.ingredients.map((ing, index) => (
                   <div key={index}>
-                    {ing.title}
+                    {ing.name}
                     {recipe?.ingredients?.length > 1 && ","}
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="flex gap-1">
+              <div className="flex flex-wrap   gap-1">
                 {["base", "topping", "dressing", "extra", "vegetable"].map(
                   (category, categoryIndex) =>
                     recipe[categoryIndex]?.[category]?.length > 0 &&
                     recipe[categoryIndex]?.[category].map((item, itemIndex) => (
                       <div key={itemIndex}>
-                        {item.title}
+                        {item.name}
                         {recipe[categoryIndex]?.[category]?.length > 1 && ","}
                       </div>
                     ))

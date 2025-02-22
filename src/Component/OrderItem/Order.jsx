@@ -4,6 +4,7 @@ import {
   removeRecipeFromCart,
   saveOrderRecipeDetails,
 } from "../../features/saladSlice";
+import ImageComponent from "../Common/ImageComponent";
 export const Order = () => {
   const dispatch = useDispatch();
   const OrderList = useSelector((state) => state?.salad?.OrderItem);
@@ -39,6 +40,7 @@ export const Order = () => {
     dispatch(removeRecipeFromCart(id));
   };
 
+
   const handlePriceForOrder = (price, recipeName) => {
     dispatch(saveOrderRecipeDetails({ price: price, recipeName: recipeName }));
   };
@@ -65,41 +67,39 @@ export const Order = () => {
 
       {OrderList?.map((recipe, recipeIndex) => (
         <div
-          className="flex gap-8 border-b border-white-200 pb-4"
+          className="flex md:flex-nowrap flex-wrap gap-8 border-b border-white-200 pb-4"
           key={recipeIndex}
         >
-          <div className="w-60 h-40 border flex flex-wrap justify-start overflow-y-auto rounded">
+          <div className="w-60 h-40 border flex  justify-start overflow-y-auto rounded">
             {["base", "topping", "dressing", "extra", "vegetable"].map(
               (category, index) =>
                 recipe[index]?.[category]?.length > 0 &&
                 recipe[index]?.[category].map((item) => (
-                  <div className="h-16 shadow-lg" key={item.id}>
-                    <img
-                      src={`${import.meta.env.VITE_IMAGE_URL}/${item.img}`}
-                      alt={item.title}
-                    />
-                  </div>
+                  <ImageComponent
+                    key={item.id}
+                    src={item?.image}
+                    imgCss="h-16 shadow-lg"
+                  />
                 ))
             )}
-            {recipe.img && (
-              <div className=" shadow-lg" key={recipeIndex}>
-                <img
-                  src={`${import.meta.env.VITE_IMAGE_URL}/${recipe.img}`}
-                  alt={recipe.title}
-                />
-              </div>
+            {recipe?.image && (
+              <ImageComponent
+                key={recipe.id}
+                src={recipe?.image}
+                imgCss={"object-cover"}
+              />
             )}
           </div>
           <div>
             <h1 className="text-lg font-semibold text-black-600">
-              {recipe[5]?.recipeName || recipe?.title}
+              {recipe[5]?.recipeName || recipe?.name}
             </h1>
 
             {recipe?.ingredients ? (
-              <div className="flex gap-1">
+              <div className="flex flex-wrap  gap-1">
                 {recipe?.ingredients.map((ing, index) => (
                   <div key={index}>
-                    {ing.title}
+                    {ing.name}
                     {recipe?.ingredients?.length > 1 && ","}
                   </div>
                 ))}
@@ -111,7 +111,7 @@ export const Order = () => {
                     recipe[categoryIndex]?.[category]?.length > 0 &&
                     recipe[categoryIndex]?.[category].map((item, itemIndex) => (
                       <div key={itemIndex}>
-                        {item.title}
+                        {item.name}
                         {recipe[categoryIndex]?.[category]?.length > 1 && ","}
                       </div>
                     ))

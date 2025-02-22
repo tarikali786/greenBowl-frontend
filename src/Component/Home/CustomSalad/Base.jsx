@@ -3,19 +3,16 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import FilterNoneRoundedIcon from "@mui/icons-material/FilterNoneRounded";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { SkeletonLoading } from "../../Common";
 import { useSelector, useDispatch } from "react-redux";
 import {
   createRecipe,
   increaseWeightOfItem,
   removeItemFromRecipe,
 } from "../../../features/saladSlice";
+import ImageComponent from "../../Common/ImageComponent";
 
 export const Base = () => {
-  const [loading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-
   const baseData = useSelector((state) => state.salad.base);
   const base = useSelector((state) => state.salad.createRecipe[0].base);
 
@@ -62,19 +59,16 @@ export const Base = () => {
                   : ""
               }`}
             >
-              <div className="w-full h-[22vh] md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden">
-                {loading && <SkeletonLoading />}
-                <img
-                  src={item.img}
-                  alt=""
-                  loading="lazy"
-                  className="object-cover"
-                  onLoad={() => setIsLoading(false)}
-                />
-              </div>
+              <ImageComponent
+                variant="rounded"
+                src={item.image}
+                imgCss="object-cover "
+                cardCss="w-full h-[22vh] md:h-[22vh] lg:h-[24vh] xl:h-[26vh] rounded-lg shadow-xl overflow-hidden"
+              />
+
               <div className="flex items-center justify-between my-2">
                 <p className="text-[18px] font-semibold text-black-600 mt-1">
-                  {item.title}
+                  {item.name}
                 </p>
                 <div className="flex items-center gap-2">
                   <ScaleRoundedIcon className="text-green-600" />
