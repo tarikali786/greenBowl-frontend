@@ -29,9 +29,7 @@ export const Base = () => {
     }
   };
 
-
   const handleWeight = (e, id) => {
-    
     e.stopPropagation();
     dispatch(
       increaseWeightOfItem({ typeKey: "base", id: id, weightChange: 250 })
@@ -79,11 +77,10 @@ export const Base = () => {
                       suppressContentEditableWarning
                       className="outline-none px-1 pl-2"
                     >
-                      500 g
+                      {item?.weight} g
                     </p>
                     <button
                       onClick={(e) => handleWeight(e, item.id)}
-                      disabled={item.weight <= 250}
                       className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl cursor-pointer"
                     >
                       +

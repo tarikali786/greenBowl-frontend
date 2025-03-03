@@ -86,7 +86,6 @@ export const Vegetables = () => {
                     </p>
                     <button
                       onClick={(e) => handleWeight(e, item.id)}
-                      disabled={item.weight <= 250}
                       className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl"
                     >
                       +

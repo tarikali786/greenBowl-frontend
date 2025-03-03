@@ -19,7 +19,6 @@ export const Profile = () => {
     gender: userDetails?.gender,
   });
 
-  console.log(userDetails);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -40,10 +39,9 @@ export const Profile = () => {
     return <div className="text-center py-10">Loading user details...</div>;
   }
 
-  console.log(formData);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg mt-10">
+    <div className="max-w-4xl mx-auto p-6 bg-white-500 rounded-xl shadow-lg mt-10">
       <div>
         <div>
           {editing ? (
@@ -95,14 +93,14 @@ export const Profile = () => {
               <p className="text-lg font-medium">
                 {userDetails.name || "Unknown Name"}
               </p>
-              <p className="text-gray-600">Email: {userDetails.email}</p>
-              <p className="text-gray-600">Phone: {userDetails.phone}</p>
-              <p className="text-gray-600">
+              <p className="text-black-400">Email: {userDetails.email}</p>
+              <p className="text-black-400">Phone: {userDetails.phone}</p>
+              <p className="text-black-400">
                 Gender: {userDetails.gender || "Not specified"}
               </p>
               <button
                 onClick={() => setEditing(true)}
-                className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md"
+                className="mt-2 bg-blue-500 text-white-500 px-4 py-2 rounded-md"
               >
                 Edit Profile
               </button>
@@ -124,14 +122,14 @@ export const Profile = () => {
               </div>
             ))
           ) : (
-            <p className="text-gray-500">No addresses added.</p>
+            <p className="text-black-500">No addresses added.</p>
           )}
         </div>
       </div>
 
       {/* Order History */}
       <div className="mt-6">
-        <h2 className="text-xl font-semibold text-green-700">Order History</h2>
+        <h2 className="text-xl font-semibold text-green-600">Order History</h2>
         <div className="mt-4 space-y-4">
           {userDetails?.orders?.map((order) => (
             <div
@@ -145,14 +143,14 @@ export const Profile = () => {
                 <p className="text-sm text-gray-500">Date: {order.date}</p>
               </div>
               <div className="flex items-center">
-                <p className="text-green-700 font-semibold text-lg">
+                <p className="text-green-600 font-semibold text-lg">
                   {order.total}
                 </p>
                 <span
                   className={`ml-4 px-3 py-1 rounded-full text-sm ${
                     order.status === "Delivered"
-                      ? "bg-green-500 text-white"
-                      : "bg-yellow-400 text-white"
+                      ? "bg-green-500 text-white-500"
+                      : "bg-yellow-400 text-white-500"
                   }`}
                 >
                   {order.status}
