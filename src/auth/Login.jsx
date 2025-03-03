@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./style.css";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleSignUp } from "./Google";
@@ -6,21 +6,22 @@ import { post } from "../Helper";
 import { toast } from "react-toastify";
 
 export const Login = () => {
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("9616888913");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const OnhandleChange = (e) => {
     setPhone(e.target.value);
   };
+
   const handleSubmit = async (e) => {
-  
     e.preventDefault();
-      setLoading(true);
+    setLoading(true);
     try {
       const res = await post("/account/account-login/", { phone: phone });
       if (res.status == 200) {
         localStorage.setItem("otpAccessCode", res?.data?.access_token);
+        localStorage.setItem("greenOTP", res?.data?.otp);
         toast.success(res?.data?.message);
         navigate("/verify-otp");
       } else {

@@ -29,7 +29,9 @@ export const Base = () => {
     }
   };
 
+
   const handleWeight = (e, id) => {
+    
     e.stopPropagation();
     dispatch(
       increaseWeightOfItem({ typeKey: "base", id: id, weightChange: 250 })
@@ -74,16 +76,15 @@ export const Base = () => {
                   <ScaleRoundedIcon className="text-green-600" />
                   <div className="bg-white-400 rounded-md flex items-center overflow-hidden">
                     <p
-                      contentEditable
                       suppressContentEditableWarning
                       className="outline-none px-1 pl-2"
                     >
-                      {item.weight}g
+                      500 g
                     </p>
                     <button
                       onClick={(e) => handleWeight(e, item.id)}
                       disabled={item.weight <= 250}
-                      className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl"
+                      className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl cursor-pointer"
                     >
                       +
                     </button>

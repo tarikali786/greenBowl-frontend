@@ -8,35 +8,27 @@ import { post } from "../servic";
 export const GoogleSignUp = () => {
   const navigate = useNavigate();
   const handleLoginSuccess = async (credentialResponse) => {
-    try {
-      console.log("Sending token:", credentialResponse.credential); // Debugging token
-      const response = await post("/account/google-login/", {
-        token: credentialResponse.credential,
-      });
+    const response = await post("/account/google-login/", {
+      token: credentialResponse.credential,
+    });
 
-      if (response.status === 200) {
-        console.log("Login Success:", response.data);
-
-        if (response?.data?.verify === false) {
-          localStorage.setItem("otpAccessCode", response?.data?.access_token);
-          toast.success(response?.data?.message);
-          navigate("/number");
-        } else {
-          navigate("/");
-          const data = {
-            data: {
-              uid: response.data?.user?.uid,
-              name: response.data?.user?.name,
-            },
-            access_token: response.data?.access_token,
-            refresh_token: response.data?.refresh_token,
-          };
-          storeUser(data);
-        }
+    if (response.status === 200) {
+      if (response?.data?.verify === false) {
+        localStorage.setItem("otpAccessCode", response?.data?.access_token);
+        toast.success(response?.data?.message);
+        navigate("/number");
+      } else {
+        navigate("/");
+        const data = {
+          data: {
+            uid: response.data?.user?.uid,
+            name: response.data?.user?.name,
+          },
+          access_token: response.data?.access_token,
+          refresh_token: response.data?.refresh_token,
+        };
+        storeUser(data);
       }
-    } catch (error) {
-      console.error("Login Error:", error);
-      toast.error("Network Error. Please check your connection and try again.");
     }
   };
 

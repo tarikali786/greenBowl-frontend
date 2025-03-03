@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
 export const CheckoutForm = ({ totalPrice }) => {
@@ -8,7 +8,7 @@ export const CheckoutForm = ({ totalPrice }) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const createPaymentIntent = async () => { 
+  const createPaymentIntent = async () => {
     const api = `${
       import.meta.env.VITE_API_URL
     }/payment/create-payment-intent/`;
@@ -28,7 +28,7 @@ export const CheckoutForm = ({ totalPrice }) => {
       "Content-Type": "application/json",
     };
     try {
-      const response = await axios.post  (api, data, { headers });
+      const response = await axios.post(api, data, { headers });
 
       setPaymentIntentid(response?.data?.payment_intent_id);
     } catch (error) {
@@ -77,53 +77,57 @@ export const CheckoutForm = ({ totalPrice }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md"
-    >
-      <div className="mb-4">
-        <label
-          htmlFor="card-element"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Credit or debit card
-        </label>
-        <div className="border rounded-md p-3">
-          <CardElement
-            id="card-element"
-            options={{
-              style: {
-                base: {
-                  fontSize: "16px",
-                  color: "#424770",
-                  "::placeholder": {
-                    color: "#aab7c4",
+    <>
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md"
+      >
+        <div className="mb-4">
+          <label
+            htmlFor="card-element"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Credit or debit card
+          </label>
+          <div className="border rounded-md p-3">
+            <CardElement
+              id="card-element"
+              options={{
+                style: {
+                  base: {
+                    fontSize: "16px",
+                    color: "#424770",
+                    "::placeholder": {
+                      color: "#aab7c4",
+                    },
+                  },
+                  invalid: {
+                    color: "#9e2146",
                   },
                 },
-                invalid: {
-                  color: "#9e2146",
-                },
-              },
-            }}
-          />
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <button
-        type="submit"
-        disabled={isProcessing || !stripe}
-        className="w-full bg-green-600 text-white-500 font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition disabled:opacity-50"
-      >
-        {isProcessing ? "Processing..." : "Pay Now"}
-      </button>
-      {paymentStatus && (
-        <div
-          className={`mt-4 text-center ${
-            paymentStatus.includes("failed") ? "text-red-600" : "text-green-600"
-          }`}
+        <button
+          type="submit"
+          disabled={isProcessing || !stripe}
+          className="w-full bg-green-600 text-white-500 font-semibold py-2 px-4 rounded-md hover:bg-green-700 transition disabled:opacity-50"
         >
-          {paymentStatus}
-        </div>
-      )}
-    </form>
+          {isProcessing ? "Processing..." : "Pay Now"}
+        </button>
+        {paymentStatus && (
+          <div
+            className={`mt-4 text-center ${
+              paymentStatus.includes("failed")
+                ? "text-red-600"
+                : "text-green-600"
+            }`}
+          >
+            {paymentStatus}
+          </div>
+        )}
+      </form>
+    </>
   );
 };

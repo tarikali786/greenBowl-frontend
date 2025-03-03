@@ -46,6 +46,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyNumber />} />
         <Route path="/number" element={<GoogleNumber />} />
+        <Route path="/error" element={<p>Not Found</p>} />
       </Routes>
       <ToastContainer
         position="top-right"

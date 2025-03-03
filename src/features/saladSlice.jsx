@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
 import axios from "axios";
+import { get, post } from "../Helper/Api/api";
+import { userData } from "../Helper/Helper";
 
 const initialState = {
   base: [],
@@ -27,8 +29,13 @@ const initialState = {
     { vegetable: [] },
   ],
   searchItem: {},
+  userDetails: "",
 };
-
+const { access_green } = userData();
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${access_green}`,
+};
 export const fetchHomePageData = createAsyncThunk(
   "salad/fetchHomePageData",
   async () => {
@@ -37,6 +44,12 @@ export const fetchHomePageData = createAsyncThunk(
     return response.data;
   }
 );
+
+export const fetchUserDetails = createAsyncThunk("user/address", async () => {
+  const api = "/account/user-details/";
+  const response = await get(api, { headers });
+  return response.data;
+});
 
 export const saladSlice = createSlice({
   name: "salad",
@@ -141,6 +154,17 @@ export const saladSlice = createSlice({
     builder.addCase(fetchHomePageData.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error;
+    });
+
+    builder.addCase(fetchUserDetails.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchUserDetails.fulfilled, (state, action) => {
+      state.loading = false;
+      state.userDetails = action?.payload.data;
+    });
+    builder.addCase(fetchUserDetails.rejected, (state, action) => {
+      state.loading = false;
     });
   },
 });

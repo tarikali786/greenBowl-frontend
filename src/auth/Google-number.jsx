@@ -37,6 +37,7 @@ export const GoogleNumber = () => {
       if (res.status == 200) {
         localStorage.setItem("otpAccessCode", res?.data?.access_token);
         toast.success(res?.data?.message);
+        localStorage.setItem("greenOTP", res?.data?.otp);
         navigate("/verify-otp");
       } else {
         toast.error("Something went wrong, try again");
@@ -53,7 +54,7 @@ export const GoogleNumber = () => {
       <div className="w-[380px] mt-32  ">
         <div className="border-2 border-white-400 rounded-xl px-4 py-6  w-full mt-6  form_section">
           <h2 className="text-2xl text-center text-white-500 font-semibold">
-            Sign In
+            Enter your mobile number
           </h2>
 
           <form onSubmit={handleSubmit} className="mt-5">

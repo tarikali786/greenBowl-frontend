@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import { post } from "../Helper/Api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { storeUser } from "../Helper/Helper";
 import "./style.css";
@@ -9,18 +9,24 @@ export const VerifyNumber = () => {
   const [otpValue, setOTPValue] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const GreenOTP = localStorage.getItem("greenOTP") || "";
+  const access_token = localStorage.getItem("otpAccessCode") || "";
 
-  const handleOTPSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const access_token = localStorage.getItem("otpAccessCode") || "";
-
+  useEffect(() => {
     if (!access_token) {
       toast.error("Authentication token is missing. Please log in again.");
       navigate("/login");
       return; // Stop execution if no token
     }
+
+    if (GreenOTP) {
+      setOTPValue(GreenOTP);
+    }
+  }, []);
+
+  const handleOTPSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await post(
@@ -33,20 +39,9 @@ export const VerifyNumber = () => {
           },
         }
       );
-      if (response.status == 200) {
-        toast.success("OTP verified successfully!");
-        console.log("Response:", response?.data);
-
-        storeUser(response?.data);
-      }
-
+      toast.success("OTP verified successfully!");
+      storeUser(response?.data);
       navigate("/");
-    } catch (error) {
-      console.error("Error Response:", error.response?.data || error);
-      toast.error(
-        error.response?.data?.message ||
-          "Something went wrong. Please try again."
-      );
     } finally {
       setLoading(false);
     }
@@ -68,7 +63,7 @@ export const VerifyNumber = () => {
                 type="number"
                 name="otp"
                 value={otpValue}
-                placeholder="0000"
+                placeholder="00000"
                 required
                 onChange={(e) => setOTPValue(e.target.value)}
                 className="w-full border border-white-500 p-2 rounded-md outline-red-500"

@@ -14,7 +14,6 @@ export const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Handle form input changes
   const handleChange = ({ target }) => {
     const { name, value } = target;
     setUser((prev) => ({
@@ -26,19 +25,12 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(user);
-
-    try {
-      const response = await post("/account/account-register/", user);
-      toast.success(response.data.message);
-      localStorage.setItem("otpAccessCode", response?.data?.access_token);
-      navigate("/verify-otp");
-    } catch (error) {
-      console.error(error);
-      toast.error("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    const response = await post("/account/account-register/", user);
+    toast.success(response.data.message);
+    localStorage.setItem("greenOTP", response?.data?.otp);
+    localStorage.setItem("otpAccessCode", response?.data?.access_token);
+    setLoading(false);
+    navigate("/verify-otp");
   };
 
   return (

@@ -1,37 +1,131 @@
-import React from "react";
-import { Avatar } from "@mui/material";
-// import { Mail, Phone, MapPin, ShoppingBag } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserDetails } from "../../features/saladSlice";
 export const Profile = () => {
-  const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+91 98765 43210",
-    address: "123 Green Street, City, PIN - 560001",
-    orders: [
-      {
-        id: "ORD12345",
-        date: "Feb 18, 2025",
-        total: "₹499",
-        status: "Delivered",
-      },
-      {
-        id: "ORD67890",
-        date: "Feb 12, 2025",
-        total: "₹299",
-        status: "Out for Delivery",
-      },
-    ],
+  const dispatch = useDispatch();
+  const [editing, setEditing] = useState(false);
+  const userDetails = useSelector((state) => state?.salad?.userDetails);
+  console.log(userDetails);
+
+  useEffect(() => {
+    if (!userDetails) {
+      dispatch(fetchUserDetails());
+    }
+  }, []);
+  const [formData, setFormData] = useState({
+    name: userDetails?.name,
+    email: userDetails?.email,
+    phone: userDetails?.phone,
+    gender: userDetails?.gender,
+  });
+
+  console.log(userDetails);
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  // const handleUpdateProfile = async () => {
+  //   try {
+  //     const response = await patch("/api/user/profile/", formData, {
+  //       headers,
+  //     });
+  //     setUserDetails(response.data);
+  //     setEditing(false);
+  //   } catch (error) {
+  //     console.error("Error updating profile:", error);
+  //   }
+  // };
+
+  if (!userDetails) {
+    return <div className="text-center py-10">Loading user details...</div>;
+  }
+
+  console.log(formData);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg mt-10">
-      {/* User Info */}
-      <div className="flex items-center space-x-6">
+      <div>
         <div>
-          <h1 className="text-2xl font-bold text-green-700">{user.name}</h1>
-          <p className="text-gray-600 flex items-center">{user.email}</p>
-          <p className="text-gray-600 flex items-center">{user.phone}</p>
-          <p className="text-gray-600 flex items-center">{user.address}</p>
+          {editing ? (
+            <>
+              <input
+                name="name"
+                value={formData?.name}
+                onChange={handleInputChange}
+                className="border p-2 rounded-md w-full mb-2"
+              />
+              <input
+                name="email"
+                value={formData?.email}
+                onChange={handleInputChange}
+                className="border p-2 rounded-md w-full mb-2"
+              />
+              <input
+                name="phone"
+                value={formData?.phone}
+                onChange={handleInputChange}
+                className="border p-2 rounded-md w-full mb-2"
+              />
+              <select
+                name="gender"
+                value={formData?.gender}
+                onChange={handleInputChange}
+                className="border p-2 rounded-md w-full mb-2"
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+              <button
+                // onClick={handleUpdateProfile}
+                className="bg-green-500 text-white px-4 py-2 rounded-md"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setEditing(false)}
+                className="ml-2 text-gray-500"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="text-lg font-medium">
+                {userDetails.name || "Unknown Name"}
+              </p>
+              <p className="text-gray-600">Email: {userDetails.email}</p>
+              <p className="text-gray-600">Phone: {userDetails.phone}</p>
+              <p className="text-gray-600">
+                Gender: {userDetails.gender || "Not specified"}
+              </p>
+              <button
+                onClick={() => setEditing(true)}
+                className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md"
+              >
+                Edit Profile
+              </button>
+            </>
+          )}
+        </div>
+        <h3 className="text-xl font-semibold mt-6">Addresses</h3>
+        <div className="mt-2">
+          {userDetails?.addresses?.length > 0 ? (
+            userDetails?.addresses?.map((address, index) => (
+              <div key={index} className="border p-4 rounded-md mt-2">
+                <p>
+                  {address.street_address} - {address.street_address2},{" "}
+                  {address.city}, {address.state}, {address.country},
+                </p>
+                <p>
+                  {address.country} - {address.pin_code}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500">No addresses added.</p>
+          )}
         </div>
       </div>
 
@@ -39,7 +133,7 @@ export const Profile = () => {
       <div className="mt-6">
         <h2 className="text-xl font-semibold text-green-700">Order History</h2>
         <div className="mt-4 space-y-4">
-          {user.orders.map((order) => (
+          {userDetails?.orders?.map((order) => (
             <div
               key={order.id}
               className="p-4 bg-gray-100  flex justify-between items-center border-b border-black-100 "

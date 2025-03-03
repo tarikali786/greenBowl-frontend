@@ -25,8 +25,6 @@ export const get = async (url, config) => {
 
 // Function to make a POST request
 export const post = async (url, data, config) => {
-  console.log(axiosInstance?.baseURL);
-
   try {
     const response = await axiosInstance.post(url, data, config || null);
     return response;
@@ -59,18 +57,16 @@ export const remove = async (url, config) => {
 const handleRequestError = (error) => {
   if (error.response) {
     if (error.response.status === 401) {
-      // window.location.href = "/auth/sing-in";
       throw new Error("Unauthorized Access. Invalid Credentials.");
     }
     if (error.response.status === 500) {
-      window.location.href = "/error";
+      // window.location.href = "/error";
       throw new Error("Internal Server Error. Please try again later.");
     }
-    // if (error.response.status === 400) {
-    //   console.log(error.message);
-    //   // window.location.href = "/error";
-    //   throw new Error(`Network Error: ${error.error.message}`);
-    // }
+    if (error.response.status === 400) {
+      toast.error(error?.response?.data?.message); 
+      throw new Error(error);
+    }
     throw new Error(`Error: ${error}`);
   } else {
     throw new Error(`Error: ${error.message}`);
