@@ -70,7 +70,7 @@ export const CheckoutForm = ({ totalPrice }) => {
     if (error) {
       setPaymentStatus(`Payment failed: ${error.message}`);
     } else if (paymentIntent) {
-      setPaymentStatus("Payment successful!");
+      setPaymentStatus("Order  successful!");
       console.log("PaymentIntent:", paymentIntent);
     }
     setIsProcessing(false);

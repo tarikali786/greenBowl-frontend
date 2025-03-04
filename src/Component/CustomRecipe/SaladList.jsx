@@ -1,59 +1,51 @@
 import { useEffect, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useDispatch, useSelector } from "react-redux";
-import { removeItemFromRecipe, saveRecipe } from "../../features/saladSlice";
+import {
+  removeItemFromRecipe,
+  saveRecipeItem,
+} from "../../features/saladSlice";
 import ImageComponent from "../Common/ImageComponent";
+import { toast } from "react-toastify";
 export const SaladList = () => {
   const [showCard, setShowCard] = useState(true);
   const dispatch = useDispatch();
   const createRecipeData = useSelector((state) => state?.salad?.createRecipe);
   const recipeCount = useSelector((state) => state.salad.recipe);
   const [recipeName, setRecipeName] = useState("");
+  const { loadingRecipe } = useSelector((state) => state.salad);
+  console.log(createRecipeData);
 
   useEffect(() => {
-    const hasData = createRecipeData.some((section) =>
-      Object.values(section).some(
-        (items) => Array.isArray(items) && items.length > 0
-      )
-    );
+    const hasData = createRecipeData.length > 0;
     setShowCard(hasData);
     setRecipeName(`Recipe${recipeCount.length}`);
   }, [createRecipeData, recipeCount]);
 
   const handleSaveRecipe = () => {
-    dispatch(saveRecipe({ recipeName: recipeName, data: createRecipeData }));
-  };
+    const data = {
+      name: recipeName,
+      total_price: createRecipeData?.reduce(
+        (sum, item) => sum + parseFloat(item.price),
+        0
+      ),
+      ingredients: createRecipeData?.map((item) => item.uid) || [],
+    };
 
-  const handleRemoveItem = (type, id) => {
-    dispatch(
-      removeItemFromRecipe({
-        type: type,
-        id: id,
+    dispatch(saveRecipeItem(data))
+      .unwrap()
+      .then((res) => {
+        toast.success("Added ");
+        console.log(res);
       })
-    );
+      .catch((error) => {
+        toast.error("Something went wrong please try again");
+        console.log(error);
+      });
   };
 
-  const renderItems = (type, items) => {
-    if (!Array.isArray(items)) return null;
-    return items.map((item, index) => (
-      <div
-        key={index}
-        className="shadow-lg px-1 cursor-pointer"
-        onClick={() => handleRemoveItem(type.toUpperCase(), item.id)}
-      >
-        <ImageComponent
-          src={item.image}
-          cardCss="w-auto h-12"
-          imgCss="object-cover rounded-md"
-        />
-        <p className="flex justify-between gap-2 mt-1">
-          <span className="text-[12px]  text-black-200 line-clamp-1">
-            {item.name}
-          </span>
-          <span className="text-[12px] text-black-300">{item.price}</span>
-        </p>
-      </div>
-    ));
+  const handleRemoveItem = (uid) => {
+    dispatch(removeItemFromRecipe({ uid: uid }));
   };
 
   return (
@@ -75,10 +67,25 @@ export const SaladList = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-3 mt-4 max-h-[30vh] overflow-y-auto">
-          {createRecipeData.map((section) => {
-            const [type, items] = Object.entries(section)[0];
-            return renderItems(type, items);
-          })}
+          {createRecipeData?.map((item, index) => (
+            <div
+              key={index}
+              className="shadow-lg px-1 cursor-pointer"
+              onClick={() => handleRemoveItem(item.uid)}
+            >
+              <ImageComponent
+                src={item.image}
+                cardCss="w-auto h-12"
+                imgCss="object-cover rounded-md"
+              />
+              <p className="flex justify-between gap-2 mt-1">
+                <span className="text-[12px]  text-black-200 line-clamp-1">
+                  {item.name}
+                </span>
+                <span className="text-[12px] text-black-300">{item.price}</span>
+              </p>
+            </div>
+          ))}
         </div>
 
         <div className="mt-3 mb-2 flex gap-2 justify-between">
@@ -86,7 +93,7 @@ export const SaladList = () => {
             className="text-sm bg-green-600 py-2 text-center px-4 rounded-md text-white-500"
             onClick={handleSaveRecipe}
           >
-            Save
+            {loadingRecipe ? "..." : "Save"}
           </button>
         </div>
       </div>

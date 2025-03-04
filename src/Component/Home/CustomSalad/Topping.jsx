@@ -13,15 +13,15 @@ import ImageComponent from "../../Common/ImageComponent";
 export const Topping = () => {
   const dispatch = useDispatch();
   const toppingData = useSelector((state) => state.salad.topping);
-  const topping = useSelector((state) => state.salad.createRecipe[1].topping);
+  const topping = useSelector((state) => state.salad.createRecipe);
 
-  const handletToppingDataSelection = (id) => {
-    if (topping.find((i) => i.id === id)) {
-      dispatch(removeItemFromRecipe({ type: "topping", id: id }));
+  const handletToppingDataSelection = (uid) => {
+    if (topping.find((i) => i.uid === uid)) {
+      dispatch(removeItemFromRecipe({ uid: uid }));
     } else {
-      const data = toppingData.find((i) => i.id === id);
+      const data = toppingData.find((i) => i.uid === uid);
       if (data) {
-        dispatch(createRecipe({ type: "topping", data: data }));
+        dispatch(createRecipe({ data: data }));
       }
     }
   };
@@ -52,10 +52,10 @@ export const Topping = () => {
       </div>
       <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6 ">
         {toppingData.slice(0, 4)?.map((item) => (
-          <div className="mt-8" key={item.id}>
+          <div className="mt-8" key={item.uid}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
-                topping.some((i) => i.id === item.id)
+                topping.some((i) => i.uid === item.uid)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -81,7 +81,7 @@ export const Topping = () => {
                       {item.weight}g
                     </p>
                     <button
-                      onClick={(e) => handleWeight(e, item.id)}
+                      onClick={(e) => handleWeight(e, item.uid)}
                       className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl"
                     >
                       +
@@ -106,13 +106,13 @@ export const Topping = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    topping.some((i) => i.id === item.id)
+                    topping.some((i) => i.uid === item.uid)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
-                  onClick={() => handletToppingDataSelection(item.id)}
+                  onClick={() => handletToppingDataSelection(item.uid)}
                 >
-                  {topping.some((i) => i.id === item.id) ? "Remove" : "Add"}
+                  {topping.some((i) => i.uid === item.uid) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

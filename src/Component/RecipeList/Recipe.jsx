@@ -12,30 +12,13 @@ export const Recipe = () => {
 
   console.log(recipeList);
 
-  // Function to calculate the total price of a recipe
-  const calculateTotalPrice = (recipe) => {
-    const categories = ["base", "topping", "dressing", "extra", "vegetable"];
-    return categories.reduce((total, category, index) => {
-      if (recipe[index]?.[category]?.length > 0) {
-        total += recipe[index][category].reduce(
-          (sum, item) => sum + Number(item.price || 0),
-          0
-        );
-      }
-      return total;
-    }, 0);
-  };
-
   // Function to calculate the total calories of a recipe
   const calculateTotalCalories = (recipe) => {
-    const categories = ["base", "topping", "dressing", "extra", "vegetable"];
-    return categories.reduce((total, category, index) => {
-      if (recipe[index]?.[category]?.length > 0) {
-        total += recipe[index][category].reduce(
-          (sum, item) => sum + Number(item.calories?.split(" ")[0] || 0),
-          0
-        );
-      }
+    return recipe.reduce((total, category) => {
+      total += category.reduce(
+        (sum, item) => sum + Number(item.calories?.split(" ")[0] || 0),
+        0
+      );
       return total;
     }, 0);
   };
@@ -78,48 +61,34 @@ export const Recipe = () => {
           key={recipe?.uid}
         >
           <div className="w-60 h-40 border flex flex-wrap justify-start overflow-y-auto rounded">
-            {["base", "topping", "dressing", "extra", "vegetable"].map(
-              (category, index) =>
-                recipe[index]?.[category]?.length > 0 &&
-                recipe[index]?.[category].map((item) => (
-                  <ImageComponent
-                    key={item.uid}
-                    src={item.image}
-                    cardCss="h-16 shadow-lg"
-                  />
-                ))
-            )}
+            {recipe?.ingredients?.map((item) => (
+              <ImageComponent
+                key={item.uid}
+                src={item.image}
+                cardCss="h-16 shadow-lg"
+              />
+            ))}
           </div>
 
           <div>
             <h1 className="text-lg font-semibold text-black-600">
-              {recipe?.recipeName}
+              {recipe?.name}
             </h1>
 
             <div className="flex gap-1 flex-wrap">
-              {["base", "topping", "dressing", "extra", "vegetable"].map(
-                (category, categoryIndex) =>
-                  recipe[categoryIndex]?.[category]?.length > 0 &&
-                  recipe[categoryIndex]?.[category].map((item, itemIndex) => (
-                    <div
-                      key={itemIndex}
-                      className="flex flex-wrap gap-1 font-semibold"
-                    >
-                      {item.name}
-                      {recipe[categoryIndex]?.[category]?.length > 1 && ","}
-                    </div>
-                  ))
-              )}
+              {recipe?.ingredients?.map((item, itemIndex) => (
+                <div
+                  key={itemIndex}
+                  className="flex flex-wrap gap-1 font-semibold"
+                >
+                  {item.name},
+                </div>
+              ))}
             </div>
 
-            <p className="text-black-600">
-              Total Price: <strong>{calculateTotalPrice(recipe)}</strong>
-            </p>
-            <p className="text-black-600">
-              Total Calories:{" "}
-              <strong>{calculateTotalCalories(recipe)} kcal</strong>
-            </p>
-            <div className="flex gap-6 mt-5">
+            <p className="text-black-600">Total Price: {recipe?.total_price}</p>
+
+            <div className="flex gap-6 mt-3">
               <button
                 className={`text-sm py-2 text-white-500 text-center px-4 rounded-md ${
                   cartList.some((item) => item.id === recipe.id)

@@ -13,38 +13,20 @@ import ImageComponent from "../../Common/ImageComponent";
 export const More = () => {
   const dispatch = useDispatch();
   const { salad } = useParams();
-  const [count, setCount] = useState(0);
   const moreData = useSelector((state) => state.salad[salad]);
-  const dynamicCreateRecipe = useSelector(
-    (state) => state.salad.createRecipe[count][salad]
-  );
-
-
-  useEffect(() => {
-    if (salad == "base") {
-      setCount(0);
-    } else if (salad == "topping") {
-      setCount(1);
-    } else if (salad == "dressing") {
-      setCount(2);
-    } else if (salad == "extra") {
-      setCount(3);
-    } else if (salad == "vegetable") {
-      setCount(4);
-    }
-  }, [salad]);
+  const dynamicCreateRecipe = useSelector((state) => state.salad.createRecipe);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleItemSelection = (id) => {
-    if (dynamicCreateRecipe.find((i) => i.id === id)) {
-      dispatch(removeItemFromRecipe({ key: salad, id: id }));
+  const handleItemSelection = (uid) => {
+    if (dynamicCreateRecipe.find((i) => i.uid === uid)) {
+      dispatch(removeItemFromRecipe({ uid: uid }));
     } else {
-      const Objectdata = moreData.find((i) => i.id === id);
+      const Objectdata = moreData.find((i) => i.uid === uid);
       if (Objectdata) {
-        dispatch(createRecipe({ type: salad, data: Objectdata }));
+        dispatch(createRecipe({ data: Objectdata }));
       }
     }
   };
@@ -65,10 +47,10 @@ export const More = () => {
       </div>
       <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6 ">
         {moreData?.map((item) => (
-          <div className="mt-8" key={item.id}>
+          <div className="mt-8" key={item.uid}>
             <div
               className={`cursor-pointer rounded-lg shadow-lg  p-4 ${
-                dynamicCreateRecipe?.some((i) => i.id === item.id)
+                dynamicCreateRecipe?.some((i) => i.uid === item.uid)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -93,7 +75,7 @@ export const More = () => {
                       {item.weight}g
                     </p>
                     <button
-                      onClick={(e) => handleWeight(e, item.id)}
+                      onClick={(e) => handleWeight(e, item.uid)}
                       disabled={item.weight <= 250}
                       className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl"
                     >
@@ -119,13 +101,13 @@ export const More = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    dynamicCreateRecipe?.some((i) => i.id === item.id)
+                    dynamicCreateRecipe?.some((i) => i.uid === item.uid)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
-                  onClick={() => handleItemSelection(item.id)}
+                  onClick={() => handleItemSelection(item.uid)}
                 >
-                  {dynamicCreateRecipe?.some((i) => i.id === item.id)
+                  {dynamicCreateRecipe?.some((i) => i.uid === item.uid)
                     ? "Remove"
                     : "Add"}
                 </button>

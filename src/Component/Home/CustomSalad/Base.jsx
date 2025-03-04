@@ -14,17 +14,17 @@ import ImageComponent from "../../Common/ImageComponent";
 export const Base = () => {
   const dispatch = useDispatch();
   const baseData = useSelector((state) => state.salad.base);
-  const base = useSelector((state) => state.salad.createRecipe[0].base);
+  const base = useSelector((state) => state.salad.createRecipe);
 
-  const handleBaseSelection = (id) => {
-    const isItemInRecipe = base.some((i) => i.id === id);
+  const handleBaseSelection = (uid) => {
+    const isItemInRecipe = base.some((item) => item.uid === uid);
     if (isItemInRecipe) {
-      dispatch(removeItemFromRecipe({ type: "base", id: id }));
+      dispatch(removeItemFromRecipe({ uid: uid }));
     } else {
-      const Objectdata = baseData.find((i) => i.id === id);
+      const Objectdata = baseData.find((i) => i.uid === uid);
 
       if (Objectdata) {
-        dispatch(createRecipe({ data: Objectdata, type: "base" }));
+        dispatch(createRecipe({ data: Objectdata }));
       }
     }
   };
@@ -51,7 +51,7 @@ export const Base = () => {
       </div>
       <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6">
         {baseData.slice(0, 4).map((item) => (
-          <div className="mt-8" key={item.id}>
+          <div className="mt-8" key={item.uid}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
                 base.some((i) => i.id == item.id)
@@ -80,7 +80,7 @@ export const Base = () => {
                       {item?.weight} g
                     </p>
                     <button
-                      onClick={(e) => handleWeight(e, item.id)}
+                      onClick={(e) => handleWeight(e, item.uid)}
                       className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl cursor-pointer"
                     >
                       +
@@ -105,13 +105,13 @@ export const Base = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    base.some((i) => i.id === item.id)
+                    base.some((i) => i.uid === item.uid)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
-                  onClick={() => handleBaseSelection(item.id)}
+                  onClick={() => handleBaseSelection(item.uid)}
                 >
-                  {base.some((i) => i.id === item.id) ? "Remove" : "Add"}
+                  {base.some((i) => i.uid === item.uid) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

@@ -14,6 +14,7 @@ export const Home = () => {
     (state) => state.salad
   );
 
+  
   useEffect(() => {
     if (exploreData.length === 0 || popularData.length === 0) {
       dispatch(fetchHomePageData());

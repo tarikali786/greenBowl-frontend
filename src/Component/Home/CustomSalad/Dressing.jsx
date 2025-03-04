@@ -13,17 +13,17 @@ import ImageComponent from "../../Common/ImageComponent";
 export const Dressing = () => {
   const dispatch = useDispatch();
   const dressingData = useSelector((state) => state.salad.dressing);
-  const dressing = useSelector((state) => state.salad.createRecipe[2].dressing);
+  const dressing = useSelector((state) => state.salad.createRecipe);
 
-  const handleDressingSelection = (id) => {
-    if (dressing.find((item) => item.id === id)) {
-      dispatch(removeItemFromRecipe({ type: "dressing", id: id }));
+  const handleDressingSelection = (uid) => {
+    if (dressing.find((item) => item.uid === uid)) {
+      dispatch(removeItemFromRecipe({ uid: uid }));
     } else {
-      const data = dressingData.find((i) => i.id === id);
+      const data = dressingData.find((i) => i.uid === uid);
       if (data) {
         dispatch(
           createRecipe({
-            type: "dressing",
+           
             data: data,
           })
         );
@@ -61,10 +61,10 @@ export const Dressing = () => {
       </div>
       <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6 ">
         {dressingData?.slice(0, 4).map((item) => (
-          <div className="mt-8" key={item.id}>
+          <div className="mt-8" key={item.uid}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
-                dressing.some((i) => i.id === item.id)
+                dressing.some((i) => i.uid === item.uid)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -90,7 +90,7 @@ export const Dressing = () => {
                       {item.weight}g
                     </p>
                     <button
-                      onClick={(e) => handleWeight(e, item.id)}
+                      onClick={(e) => handleWeight(e, item.uid)}
                       className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl"
                     >
                       +
@@ -115,13 +115,13 @@ export const Dressing = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    dressing.some((i) => i.id === item.id)
+                    dressing.some((i) => i.uid === item.uid)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
-                  onClick={() => handleDressingSelection(item.id)}
+                  onClick={() => handleDressingSelection(item.uid)}
                 >
-                  {dressing.some((i) => i.id === item.id) ? "Remove" : "Add"}
+                  {dressing.some((i) => i.uid === item.uid) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

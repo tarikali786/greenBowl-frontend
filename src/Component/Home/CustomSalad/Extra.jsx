@@ -13,27 +13,24 @@ import ImageComponent from "../../Common/ImageComponent";
 export const Extra = () => {
   const dispatch = useDispatch();
   const extraData = useSelector((state) => state.salad.extra);
-  const extra = useSelector((state) => state.salad.createRecipe[3].extra);
+  const extra = useSelector((state) => state.salad.createRecipe);
 
-  const handleExtraSelection = (id) => {
-    if (extra.find((item) => item.id === id)) {
+  const handleExtraSelection = (uid) => {
+    if (extra.find((item) => item.uid === uid)) {
       dispatch(
-        removeItemFromRecipe({
-          type: "extra",
-          id: id,
-        })
+        removeItemFromRecipe({uid: uid})
       );
     } else {
-      const data = extraData.find((i) => i.id === id);
+      const data = extraData.find((i) => i.uid === uid);
       if (data) {
-        dispatch(createRecipe({ type: "extra", data: data }));
+        dispatch(createRecipe({ data: data }));
       }
     }
   };
-  const handleWeight = (e, id) => {
+  const handleWeight = (e, uid) => {
     e.stopPropagation();
     dispatch(
-      increaseWeightOfItem({ typeKey: "extra", id: id, weightChange: 250 })
+      increaseWeightOfItem({ typeKey: "extra", uid: uid, weightChange: 250 })
     );
   };
   return (
@@ -52,10 +49,10 @@ export const Extra = () => {
       </div>
       <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6  ">
         {extraData.slice(0, 4).map((item) => (
-          <div className="mt-8" key={item.id}>
+          <div className="mt-8" key={item.uid}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
-                extra.some((i) => i.id === item.id)
+                extra.some((i) => i.uid === item.uid)
                   ? "border-4 border-green-500"
                   : ""
               }`}
@@ -81,7 +78,7 @@ export const Extra = () => {
                       {item.weight}g
                     </p>
                     <button
-                      onClick={(e) => handleWeight(e, item.id)}
+                      onClick={(e) => handleWeight(e, item.uid)}
                       className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl"
                     >
                       +
@@ -106,13 +103,13 @@ export const Extra = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    extra.some((i) => i.id === item.id)
+                    extra.some((i) => i.uid === item.uid)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
-                  onClick={() => handleExtraSelection(item.id)}
+                  onClick={() => handleExtraSelection(item.uid)}
                 >
-                  {extra.some((i) => i.id === item.id) ? "Remove" : "Add"}
+                  {extra.some((i) => i.uid === item.uid) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

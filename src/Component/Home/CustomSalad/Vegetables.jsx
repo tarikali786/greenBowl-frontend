@@ -15,17 +15,15 @@ export const Vegetables = () => {
   const dispatch = useDispatch();
   const VegetableData = useSelector((state) => state.salad.vegetable);
 
-  const vegetable = useSelector(
-    (state) => state.salad.createRecipe[4].vegetable
-  );
+  const vegetable = useSelector((state) => state.salad.createRecipe);
 
-  const handleVegetableSelection = (id) => {
-    if (vegetable.some((item) => item.id === id)) {
-      dispatch(removeItemFromRecipe({ type: "vegetable", id: id }));
+  const handleVegetableSelection = (uid) => {
+    if (vegetable.some((item) => item.uid === uid)) {
+      dispatch(removeItemFromRecipe({ uid: uid }));
     } else {
-      const data = VegetableData.find((item) => item.id === id);
+      const data = VegetableData.find((item) => item.uid === uid);
       if (data) {
-        dispatch(createRecipe({ type: "vegetable", data: data }));
+        dispatch(createRecipe({ data: data }));
       }
     }
   };
@@ -110,13 +108,13 @@ export const Vegetables = () => {
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
-                    vegetable.some((i) => i.id === item.id)
+                    vegetable.some((i) => i.uid === item.uid)
                       ? "bg-red-500 "
                       : "bg-green-500 "
                   }`}
-                  onClick={() => handleVegetableSelection(item.id)}
+                  onClick={() => handleVegetableSelection(item.uid)}
                 >
-                  {vegetable.some((i) => i.id === item.id) ? "Remove" : "Add"}
+                  {vegetable.some((i) => i.uid === item.uid) ? "Remove" : "Add"}
                 </button>
               </div>
             </div>

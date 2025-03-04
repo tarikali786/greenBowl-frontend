@@ -5,7 +5,6 @@ export const Profile = () => {
   const dispatch = useDispatch();
   const [editing, setEditing] = useState(false);
   const userDetails = useSelector((state) => state?.salad?.userDetails);
-  console.log(userDetails);
 
   useEffect(() => {
     if (!userDetails) {

@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
 import axios from "axios";
 import { get, post } from "../Helper/Api/api";
 import { userData } from "../Helper/Helper";
-
 const initialState = {
   base: [],
   topping: [],
@@ -12,6 +11,7 @@ const initialState = {
   exploreData: [],
   popularData: [],
   loading: false,
+  loadingRecipe: false,
   error: "",
   recipe: [],
   cart: [],
@@ -22,11 +22,11 @@ const initialState = {
   },
   OrderItem: [],
   createRecipe: [
-    { base: [] },
-    { topping: [] },
-    { dressing: [] },
-    { extra: [] },
-    { vegetable: [] },
+    // { base: [] },
+    // { topping: [] },
+    // { dressing: [] },
+    // { extra: [] },
+    // { vegetable: [] },
   ],
   searchItem: {},
   userDetails: "",
@@ -51,50 +51,60 @@ export const fetchUserDetails = createAsyncThunk("user/address", async () => {
   return response.data;
 });
 
+export const saveRecipeItem = createAsyncThunk("salad/Recipe", async (data) => {
+  const api = "/salad/recipe/";
+  const response = await post(api, data, { headers });
+  console.log(response);
+
+  return response;
+});
+
 export const saladSlice = createSlice({
   name: "salad",
   initialState,
   reducers: {
+    // createRecipe: (state, action) => {
+    //   const typeKey = action.payload.type.toLowerCase();
+    //   const data = action.payload.data;
+    //   state.createRecipe = state?.createRecipe.map((section) =>
+    //     section[typeKey] && Array.isArray(section[typeKey])
+    //       ? {
+    //           ...section,
+    //           [typeKey]: [...section[typeKey], data],
+    //         }
+    //       : section
+    //   );
+    // },
+    // removeItemFromRecipe: (state, action) => {
+    //   const typeKey = action.payload.type.toLowerCase();
+    //   const id = action.payload.id;
+    //   state.createRecipe = state.createRecipe.map((section) =>
+    //     section[typeKey] && Array.isArray(section[typeKey])
+    //       ? {
+    //           ...section,
+    //           [typeKey]: section[typeKey].filter((item) => item.id !== id),
+    //         }
+    //       : section
+    //   );
     createRecipe: (state, action) => {
-      const typeKey = action.payload.type.toLowerCase();
       const data = action.payload.data;
-      state.createRecipe = state?.createRecipe.map((section) =>
-        section[typeKey] && Array.isArray(section[typeKey])
-          ? {
-              ...section,
-              [typeKey]: [...section[typeKey], data],
-            }
-          : section
+      state.createRecipe.push(data);
+    },
+    removeItemFromRecipe: (state, action) => {
+      const uid = action.payload.uid;
+      state.createRecipe = state.createRecipe.filter(
+        (item) => item.uid !== uid
       );
     },
 
-    removeItemFromRecipe: (state, action) => {
-      const typeKey = action.payload.type.toLowerCase();
-      const id = action.payload.id;
-      state.createRecipe = state.createRecipe.map((section) =>
-        section[typeKey] && Array.isArray(section[typeKey])
-          ? {
-              ...section,
-              [typeKey]: section[typeKey].filter((item) => item.id !== id),
-            }
-          : section
-      );
-    },
-    saveRecipe: (state, action) => {
-      const newRecipe = {
-        id: nanoid(),
-        ...action.payload.data,
-        recipeName: action.payload.recipeName,
-      };
-      state.recipe.push(newRecipe);
-      state.createRecipe = [
-        { base: [] },
-        { topping: [] },
-        { dressing: [] },
-        { extra: [] },
-        { vegetable: [] },
-      ];
-    },
+    // saveRecipe: (state, action) => {
+    //   const newRecipe = {
+    //     ...action.payload.data,
+    //     recipeName: action.payload.recipeName,
+    //   };
+    //   state.recipe.push(newRecipe);
+    //   state.createRecipe = [  ];
+    // },
 
     removeRecipeFromList: (state, action) => {
       state.recipe = state.recipe.filter((item) => item.id !== action.payload);
@@ -105,7 +115,7 @@ export const saladSlice = createSlice({
     },
 
     removeRecipeFromCart: (state, action) => {
-      state.cart = state.cart.filter((item) => item.id !== action.payload);
+      state.cart = state.cart.filter((item) => item.uid !== action.payload);
     },
 
     increaseWeightOfItem: (state, action) => {
@@ -156,6 +166,8 @@ export const saladSlice = createSlice({
       state.error = action.error;
     });
 
+    // get User profile
+
     builder.addCase(fetchUserDetails.pending, (state, action) => {
       state.loading = true;
     });
@@ -165,6 +177,21 @@ export const saladSlice = createSlice({
     });
     builder.addCase(fetchUserDetails.rejected, (state, action) => {
       state.loading = false;
+    });
+
+    // Save Recipe Item
+    builder.addCase(saveRecipeItem.pending, (state, action) => {
+      state.loadingRecipe = true;
+    });
+    builder.addCase(saveRecipeItem.fulfilled, (state, action) => {
+      state.recipe.push(action.payload.data);
+      state.loadingRecipe = false;
+      state.createRecipe = [];
+    });
+    builder.addCase(saveRecipeItem.rejected, (state, action) => {
+      state.error = action.payload;
+      console.log(state.error);
+      state.loadingRecipe = false;
     });
   },
 });
