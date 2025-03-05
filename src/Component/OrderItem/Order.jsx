@@ -40,7 +40,6 @@ export const Order = () => {
     dispatch(removeRecipeFromCart(id));
   };
 
-
   const handlePriceForOrder = (price, recipeName) => {
     dispatch(saveOrderRecipeDetails({ price: price, recipeName: recipeName }));
   };
@@ -71,61 +70,40 @@ export const Order = () => {
           key={recipeIndex}
         >
           <div className="w-60 h-40 border flex  justify-start overflow-y-auto rounded">
-            {["base", "topping", "dressing", "extra", "vegetable"].map(
-              (category, index) =>
-                recipe[index]?.[category]?.length > 0 &&
-                recipe[index]?.[category].map((item) => (
-                  <ImageComponent
-                    key={item.id}
-                    src={item?.image}
-                    imgCss="h-16 shadow-lg"
-                  />
-                ))
-            )}
-            {recipe?.image && (
+            {recipe?.image ? (
               <ImageComponent
-                key={recipe.id}
+                key={recipe.uid}
+                cardCss="shadow-lg"
                 src={recipe?.image}
-                imgCss={"object-cover"}
               />
+            ) : (
+              recipe?.ingredients?.map((item) => (
+                <ImageComponent
+                  key={item.uid}
+                  cardCss="h-16 shadow-lg"
+                  src={item.image}
+                />
+              ))
             )}
           </div>
           <div>
             <h1 className="text-lg font-semibold text-black-600">
-              {recipe[5]?.recipeName || recipe?.name}
+              {recipe?.name}
             </h1>
 
-            {recipe?.ingredients ? (
-              <div className="flex flex-wrap  gap-1">
-                {recipe?.ingredients.map((ing, index) => (
-                  <div key={index}>
-                    {ing.name}
-                    {recipe?.ingredients?.length > 1 && ","}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex gap-1">
-                {["base", "topping", "dressing", "extra", "vegetable"].map(
-                  (category, categoryIndex) =>
-                    recipe[categoryIndex]?.[category]?.length > 0 &&
-                    recipe[categoryIndex]?.[category].map((item, itemIndex) => (
-                      <div key={itemIndex}>
-                        {item.name}
-                        {recipe[categoryIndex]?.[category]?.length > 1 && ","}
-                      </div>
-                    ))
-                )}
-              </div>
-            )}
+            <div className="flex flex-wrap gap-1">
+              {recipe?.ingredients.map((ing, index) => (
+                <div key={index}>{ing.name},</div>
+              ))}
+            </div>
 
-            {recipe.price ? (
+            {recipe.total_price ? (
               <p className="text-black-600">
-                Total Price: <strong>₹ {recipe.price}</strong>
+                Total Price: <strong>₹ {recipe.total_price}</strong>
               </p>
             ) : (
               <p className="text-black-600">
-                Total Price: <strong>₹{calculateTotalPrice(recipe)}</strong>
+                Total Price: <strong>₹{recipe.price}</strong>
               </p>
             )}
 
@@ -141,7 +119,7 @@ export const Order = () => {
             )}
             <div className="flex gap-6 mt-5">
               <Link
-                to={`/order-details/${recipe?.id}`}
+                to={`/order-details/${recipe?.uid}`}
                 className={`text-sm bg-green-500 py-2 text-center px-4 rounded-md text-white-500 `}
                 onClick={() =>
                   handlePriceForOrder(

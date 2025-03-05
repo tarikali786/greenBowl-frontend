@@ -20,7 +20,7 @@ export const Cart = () => {
       saveOrderRecipeDetails({
         price: price || 250,
         recipeName: recipeName,
-        id: id,
+        id: id, 
       })
     );
   };

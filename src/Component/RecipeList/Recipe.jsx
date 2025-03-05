@@ -2,29 +2,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   addRecipeTocart,
+  deleteUserRecipeList,
+  fetchUserRecipeList,
   removeRecipeFromList,
 } from "../../features/saladSlice";
 import ImageComponent from "../Common/ImageComponent";
+import { useEffect } from "react";
 export const Recipe = () => {
   const dispatch = useDispatch();
   const recipeList = useSelector((state) => state.salad.recipe);
   const cartList = useSelector((state) => state.salad.cart);
+  const { loading, loadingRecipe } = useSelector((state) => state.salad);
 
-  console.log(recipeList);
+  useEffect(() => {
+    if (recipeList.length == 0) {
+      dispatch(fetchUserRecipeList());
+    }
+  }, []);
 
-  // Function to calculate the total calories of a recipe
-  const calculateTotalCalories = (recipe) => {
-    return recipe.reduce((total, category) => {
-      total += category.reduce(
-        (sum, item) => sum + Number(item.calories?.split(" ")[0] || 0),
-        0
-      );
-      return total;
-    }, 0);
-  };
-
-  const handleRemoveRecipe = (id) => {
-    dispatch(removeRecipeFromList(id));
+  const handleRemoveRecipe = (uid) => {
+    dispatch(deleteUserRecipeList(uid));
   };
 
   const handleAddToCartRecipe = (id) => {
@@ -36,14 +33,17 @@ export const Recipe = () => {
     }
   };
 
+  if (loading)
+    return (
+      <p className=" px-4 md:px-14 lg:px-32 xl:px-44 py-6  text-center text-gray-500 text-lg mt-6">
+        Loading...
+      </p>
+    );
+
   return (
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 flex flex-col gap-y-4">
       {recipeList.length === 0 && (
         <div className="flex flex-col gap-10 my-20">
-          <p className="text-center text-gray-500 text-lg mt-6">
-            No recipes available yet! Start creating your first delicious salad
-            recipe now.
-          </p>
           <div className=" m-auto">
             <Link
               to="/"
@@ -61,9 +61,9 @@ export const Recipe = () => {
           key={recipe?.uid}
         >
           <div className="w-60 h-40 border flex flex-wrap justify-start overflow-y-auto rounded">
-            {recipe?.ingredients?.map((item) => (
+            {recipe?.ingredients?.map((item, index) => (
               <ImageComponent
-                key={item.uid}
+                key={recipe?.uid + index}
                 src={item.image}
                 cardCss="h-16 shadow-lg"
               />
@@ -78,7 +78,7 @@ export const Recipe = () => {
             <div className="flex gap-1 flex-wrap">
               {recipe?.ingredients?.map((item, itemIndex) => (
                 <div
-                  key={itemIndex}
+                  key={item.uid + itemIndex}
                   className="flex flex-wrap gap-1 font-semibold"
                 >
                   {item.name},
@@ -105,7 +105,7 @@ export const Recipe = () => {
 
               <button
                 className="text-sm bg-red-600 py-2 text-center px-4 rounded-md text-white-500"
-                onClick={() => handleRemoveRecipe(recipe.id)}
+                onClick={() => handleRemoveRecipe(recipe.uid)}
               >
                 Remove
               </button>

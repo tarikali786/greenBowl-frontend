@@ -14,7 +14,6 @@ export const SaladList = () => {
   const recipeCount = useSelector((state) => state.salad.recipe);
   const [recipeName, setRecipeName] = useState("");
   const { loadingRecipe } = useSelector((state) => state.salad);
-  console.log(createRecipeData);
 
   useEffect(() => {
     const hasData = createRecipeData.length > 0;

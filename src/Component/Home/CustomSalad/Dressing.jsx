@@ -4,8 +4,11 @@ import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import { Link } from "react-router-dom";
 import DressingIocn from "../../../assets/icon/dress.png";
 import { useDispatch, useSelector } from "react-redux";
+import RemoveIcon from "@mui/icons-material/Remove";
+
 import {
   createRecipe,
+  decreaseWeightOfItem,
   increaseWeightOfItem,
   removeItemFromRecipe,
 } from "../../../features/saladSlice";
@@ -23,20 +26,25 @@ export const Dressing = () => {
       if (data) {
         dispatch(
           createRecipe({
-           
             data: data,
           })
         );
       }
     }
   };
+  const handleDecreaseWeight = (e, uid) => {
+    e.stopPropagation();
+    dispatch(
+      decreaseWeightOfItem({ typeKey: "dressing", uid: uid, weightChange: 250 })
+    );
+  };
 
-  const handleWeight = (e, id) => {
+  const handleWeight = (e, uid) => {
     e.stopPropagation();
     dispatch(
       increaseWeightOfItem({
         typeKey: "dressing",
-        id: id,
+        uid: uid,
         weightChange: 250,
       })
     );
@@ -59,8 +67,8 @@ export const Dressing = () => {
           More
         </Link>
       </div>
-      <div className="grid lg:grid-cols-3 xl:grid-cols-4 mm:grid-cols-2 gap-6 ">
-        {dressingData?.slice(0, 4).map((item) => (
+      <div className="grid lg:grid-cols-3 xl:grid-cols-3 mm:grid-cols-2 gap-6 ">
+        {dressingData?.slice(0, 3).map((item) => (
           <div className="mt-8" key={item.uid}>
             <div
               className={`rounded-lg shadow-lg p-4 ${
@@ -87,14 +95,24 @@ export const Dressing = () => {
                       suppressContentEditableWarning
                       className="outline-none px-1 pl-2"
                     >
-                      {item.weight}g
+                      {parseInt(item.weight)}g
                     </p>
                     <button
                       onClick={(e) => handleWeight(e, item.uid)}
-                      className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl"
+                      className="px-3 py-1 bg-green-500 text-white-500 font-bold text-xl cursor-pointer"
                     >
                       +
                     </button>
+                    {parseInt(item.weight) >= 250 && (
+                      <button
+                        onClick={(e) => handleDecreaseWeight(e, item.uid)}
+                        className="px-2 py-1  bg-red-500 text-white-500 font-bold text-xl cursor-pointer"
+                      >
+                        <RemoveIcon
+                          style={{ fontSize: "24px", width: "16px" }}
+                        />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
