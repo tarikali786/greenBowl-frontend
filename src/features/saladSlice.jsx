@@ -97,16 +97,24 @@ export const saladSlice = createSlice({
     },
 
     increaseWeightOfItem: (state, action) => {
-      const { typeKey, uid, weightChange } = action.payload;
+      const { typeKey, uid, weightChange, price } = action.payload;
+
       if (state[typeKey] && Array.isArray(state[typeKey])) {
         state[typeKey] = state[typeKey].map((item) =>
           item.uid === uid
             ? {
                 ...item,
                 weight:
-                  (item.weight ? parseInt(item.weight, 10) : 250) +
-                  parseInt(weightChange, 10),
-                price: Math.floor(item.price * 1.5),
+                  (parseFloat(item.weight) || 500) + parseFloat(weightChange),
+                updatedPrice:
+                  parseFloat(item.updatedPrice ?? item.price) +
+                  parseFloat(price),
+
+                updatedCalories: Math.round(
+                  (parseFloat(item.calories) / 100) *
+                    ((parseFloat(item.weight) || 500) +
+                      parseFloat(weightChange))
+                ), // Recalculate calories
               }
             : item
         );
@@ -114,16 +122,29 @@ export const saladSlice = createSlice({
     },
 
     decreaseWeightOfItem: (state, action) => {
-      const { typeKey, uid, weightChange } = action.payload;
+      const { typeKey, uid, weightChange, price } = action.payload;
+
       if (state[typeKey] && Array.isArray(state[typeKey])) {
         state[typeKey] = state[typeKey].map((item) =>
           item.uid === uid
             ? {
                 ...item,
-                weight:
-                  (item.weight ? parseInt(item.weight, 10) : 250) -
-                  parseInt(weightChange, 10),
-                price: Math.floor(item.price * 1.5),
+                weight: Math.max(
+                  500,
+                  (parseFloat(item.weight) || 500) - parseFloat(weightChange)
+                ),
+                updatedPrice:
+                  parseFloat(item.updatedPrice ?? item.price) -
+                  parseFloat(price),
+
+                updatedCalories: Math.round(
+                  (parseFloat(item.calories) / 100) *
+                    Math.max(
+                      500,
+                      (parseFloat(item.weight) || 500) -
+                        parseFloat(weightChange)
+                    )
+                ),
               }
             : item
         );

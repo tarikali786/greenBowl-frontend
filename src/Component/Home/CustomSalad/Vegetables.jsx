@@ -30,20 +30,26 @@ export const Vegetables = () => {
     }
   };
 
-  const handleWeight = (e, uid) => {
+  const handleWeight = (e, uid, price) => {
     e.stopPropagation();
     dispatch(
       increaseWeightOfItem({
         typeKey: "vegetable",
         uid: uid,
         weightChange: 250,
+        price: price,
       })
     );
   };
-  const handleDecreaseWeight = (e, uid) => {
+  const handleDecreaseWeight = (e, uid, price) => {
     e.stopPropagation();
     dispatch(
-      decreaseWeightOfItem({ typeKey: "base", uid: uid, weightChange: 250 })
+      decreaseWeightOfItem({
+        typeKey: "base",
+        uid: uid,
+        weightChange: 250,
+        price: price,
+      })
     );
   };
   return (
@@ -94,14 +100,22 @@ export const Vegetables = () => {
                       {parseInt(item.weight)}g
                     </p>
                     <button
-                      onClick={(e) => handleWeight(e, item.uid)}
+                      onClick={(e) =>
+                        handleWeight(e, item.uid, Math.round(item.price / 2))
+                      }
                       className="px-3 py-1 bg-green-500 text-white-500 font-bold text-xl"
                     >
                       +
                     </button>
-                    {parseInt(item.weight) > 250 && (
+                    {parseInt(item.weight) > 500 && (
                       <button
-                        onClick={(e) => handleDecreaseWeight(e, item.uid)}
+                        onClick={(e) =>
+                          handleDecreaseWeight(
+                            e,
+                            item.uid,
+                            Math.round(item.price / 2)
+                          )
+                        }
                         className="px-2 py-1  bg-red-500 text-white-500 font-bold text-xl cursor-pointer"
                       >
                         <RemoveIcon
@@ -125,7 +139,7 @@ export const Vegetables = () => {
               <div className="flex justify-between mt-2 items-center">
                 <p>
                   <CurrencyRupeeRoundedIcon className="text-green-600" />{" "}
-                  {item?.price}
+                  {parseInt(item?.updatedPrice ?? item.price)}
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${
