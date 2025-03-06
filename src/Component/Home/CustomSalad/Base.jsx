@@ -93,7 +93,7 @@ export const Base = () => {
                     >
                       +
                     </button>
-                    {parseInt(item.weight) >= 250 && (
+                    {parseInt(item.weight) >250 && (
                       <button
                         onClick={(e) => handleDecreaseWeight(e, item.uid)}
                         className="px-2 py-1  bg-red-500 text-white-500 font-bold text-xl cursor-pointer"
