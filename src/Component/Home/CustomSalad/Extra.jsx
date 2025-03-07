@@ -95,30 +95,38 @@ export const Extra = () => {
                     >
                       {parseInt(item.weight)}g
                     </p>
-                    <button
-                      onClick={(e) =>
-                        handleWeight(e, item.uid, Math.round(item.price / 2))
-                      }
-                      className="px-3 py-1 bg-green-500 text-white-500 font-bold text-xl"
-                    >
-                      +
-                    </button>
-                    {parseInt(item.weight) > 500 && (
-                      <button
-                        onClick={(e) =>
-                          handleDecreaseWeight(
-                            e,
-                            item.uid,
-                            Math.round(item.price / 2)
-                          )
-                        }
-                        className="px-2 py-1  bg-red-500 text-white-500 font-bold text-xl cursor-pointer"
-                      >
-                        <RemoveIcon
-                          style={{ fontSize: "24px", width: "16px" }}
-                        />
-                      </button>
-                    )}
+                    {!extra.some((i) => i.uid === item.uid) && (
+                      <>
+                        <button
+                          onClick={(e) =>
+                            handleWeight(
+                              e,
+                              item.uid,
+                              Math.round(item.price / 2)
+                            )
+                          }
+                          className="px-3 py-1 bg-green-500 text-white-500 font-bold text-xl"
+                        >
+                          +
+                        </button>
+                        {parseInt(item.weight) > 500 && (
+                          <button
+                            onClick={(e) =>
+                              handleDecreaseWeight(
+                                e,
+                                item.uid,
+                                Math.round(item.price / 2)
+                              )
+                            }
+                            className="px-2 py-1  bg-red-500 text-white-500 font-bold text-xl cursor-pointer"
+                          >
+                            <RemoveIcon
+                              style={{ fontSize: "24px", width: "16px" }}
+                            />
+                          </button>
+                        )}
+                      </>
+                    )}{" "}
                   </div>
                 </div>
               </div>

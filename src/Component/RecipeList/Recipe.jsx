@@ -4,15 +4,17 @@ import {
   addRecipeTocart,
   deleteUserRecipeList,
   fetchUserRecipeList,
-  removeRecipeFromList,
 } from "../../features/saladSlice";
 import ImageComponent from "../Common/ImageComponent";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 export const Recipe = () => {
   const dispatch = useDispatch();
   const recipeList = useSelector((state) => state.salad.recipe);
   const cartList = useSelector((state) => state.salad.cart);
   const { loading, loadingRecipe } = useSelector((state) => state.salad);
+  const [deleteUid, setDeleteUid] = useState("");
+
+  console.log(recipeList);
 
   useEffect(() => {
     if (recipeList.length == 0) {
@@ -21,6 +23,7 @@ export const Recipe = () => {
   }, []);
 
   const handleRemoveRecipe = (uid) => {
+    setDeleteUid(uid);
     dispatch(deleteUserRecipeList(uid));
   };
 
@@ -64,7 +67,7 @@ export const Recipe = () => {
             {recipe?.ingredients?.map((item, index) => (
               <ImageComponent
                 key={recipe?.uid + index}
-                src={item.image}
+                src={item?.ingredient?.image}
                 cardCss="h-16 shadow-lg"
               />
             ))}
@@ -78,15 +81,18 @@ export const Recipe = () => {
             <div className="flex gap-1 flex-wrap">
               {recipe?.ingredients?.map((item, itemIndex) => (
                 <div
-                  key={item.uid + itemIndex}
+                  key={item.ingredient.uid + itemIndex}
                   className="flex flex-wrap gap-1 font-semibold"
                 >
-                  {item.name},
+                  {item?.ingredient?.name},
                 </div>
               ))}
             </div>
 
             <p className="text-black-600">Total Price: {recipe?.total_price}</p>
+            <p className="text-black-600">
+              Total Calories: {recipe?.total_calories}Kcal
+            </p>
 
             <div className="flex gap-6 mt-3">
               <button
@@ -107,7 +113,7 @@ export const Recipe = () => {
                 className="text-sm bg-red-600 py-2 text-center px-4 rounded-md text-white-500"
                 onClick={() => handleRemoveRecipe(recipe.uid)}
               >
-                Remove
+                {deleteUid === recipe.uid && loadingRecipe ? "..." : "Remove"}
               </button>
             </div>
           </div>

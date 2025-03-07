@@ -24,18 +24,30 @@ export const SaladList = () => {
   const handleSaveRecipe = () => {
     const data = {
       name: recipeName,
-      total_price: createRecipeData?.reduce(
-        (sum, item) => sum + parseFloat(item.price),
-        0
-      ),
-      ingredients: createRecipeData?.map((item) => item.uid) || [],
+      total_price: parseFloat(
+        createRecipeData?.reduce((sum, item) => sum + parseFloat(item.price), 0)
+      ).toFixed(2),
+      total_calories: parseFloat(
+        createRecipeData?.reduce(
+          (sum, item) => sum + parseFloat(item.calories),
+          0
+        )
+      ).toFixed(0),
+      ingredients:
+        createRecipeData?.map((item) => ({
+          ingredient_id: item.uid,
+          weight: parseFloat(item?.weight).toFixed(3),
+          price: parseFloat(item?.updatedPrice ?? item.price).toFixed(2),
+          calories: parseFloat(item?.updatedCalories ?? item.calories).toFixed(
+            0
+          ),
+        })) || [],
     };
 
     dispatch(saveRecipeItem(data))
       .unwrap()
       .then((res) => {
         toast.success("Added ");
-        console.log(res);
       })
       .catch((error) => {
         toast.error("Something went wrong please try again");
@@ -81,7 +93,9 @@ export const SaladList = () => {
                 <span className="text-[12px]  text-black-200 line-clamp-1">
                   {item.name}
                 </span>
-                <span className="text-[12px] text-black-300">{item.price}</span>
+                <span className="text-[12px] text-black-300">
+                  {item?.updatedPrice ?? item.price}
+                </span>
               </p>
             </div>
           ))}

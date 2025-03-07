@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
 import axios from "axios";
 import { get, post, remove } from "../Helper/Api/api";
 import { userData } from "../Helper/Helper";
+import { toast } from "react-toastify";
 const initialState = {
   base: [],
   topping: [],
@@ -64,9 +65,7 @@ export const deleteUserRecipeList = createAsyncThunk(
 export const saveRecipeItem = createAsyncThunk("salad/Recipe", async (data) => {
   const api = "/salad/recipe/";
   const response = await post(api, data, { headers });
-  console.log(response);
-
-  return response;
+  return response.data;
 });
 
 export const saladSlice = createSlice({
@@ -200,7 +199,7 @@ export const saladSlice = createSlice({
       state.loadingRecipe = true;
     });
     builder.addCase(saveRecipeItem.fulfilled, (state, action) => {
-      state.recipe.push(action.payload.data);
+      state.recipe.push(action.payload);
       state.loadingRecipe = false;
       state.createRecipe = [];
     });
