@@ -23,6 +23,7 @@ const initialState = {
   },
   OrderItem: [],
   createRecipe: [],
+  EditCustomRecipe: {},
   searchItem: {},
   userDetails: "",
 };
@@ -161,6 +162,12 @@ export const saladSlice = createSlice({
       state.OrderItem.push(item[0]);
       state.cart = state.cart.filter((item) => item.id !== action.payload);
     },
+
+    editRecipeItem: (state, action) => {
+      state.EditCustomRecipe = state.recipe.find(
+        (item) => item.uid === action.payload
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchHomePageData.pending, (state) => {
@@ -248,6 +255,7 @@ export const {
   saveOrderRecipeDetails,
   saveOderItem,
   decreaseWeightOfItem,
+  editRecipeItem,
 } = saladSlice.actions;
 
 export default saladSlice.reducer;

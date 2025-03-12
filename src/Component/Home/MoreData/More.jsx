@@ -3,9 +3,12 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import ScaleRoundedIcon from "@mui/icons-material/ScaleRounded";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import RemoveIcon from "@mui/icons-material/Remove";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   createRecipe,
+  decreaseWeightOfItem,
   increaseWeightOfItem,
   removeItemFromRecipe,
 } from "../../../features/saladSlice";
@@ -31,10 +34,28 @@ export const More = () => {
     }
   };
 
-  const handleWeight = (e, id) => {
+  const handleWeight = (e, uid, price) => {
     e.stopPropagation();
     dispatch(
-      increaseWeightOfItem({ typeKey: salad, id: id, weightChange: 250 })
+      increaseWeightOfItem({
+        typeKey: salad,
+        uid: uid,
+        weightChange: 250,
+        price: price,
+      })
+    );
+  };
+
+  const handleDecreaseWeight = (e, uid, price) => {
+    e.stopPropagation();
+
+    dispatch(
+      decreaseWeightOfItem({
+        typeKey: salad,
+        uid: uid,
+        weightChange: 250,
+        price: price,
+      })
     );
   };
 
@@ -45,7 +66,7 @@ export const More = () => {
           {salad.toUpperCase()}
         </h3>
       </div>
-      <div className="grid lg:grid-cols-4 mm:grid-cols-2 gap-6 ">
+      <div className="grid lg:grid-cols-3 mm:grid-cols-2 gap-6 ">
         {moreData?.map((item) => (
           <div className="mt-8" key={item.uid}>
             <div
@@ -72,15 +93,41 @@ export const More = () => {
                       suppressContentEditableWarning
                       className="outline-none px-1 pl-2"
                     >
-                      {item.weight}g
+                      {parseInt(item.weight)}g
                     </p>
-                    <button
-                      onClick={(e) => handleWeight(e, item.uid)}
-                      disabled={item.weight <= 250}
-                      className="px-3 py-1 bg-red-500 text-white-500 font-bold text-xl"
-                    >
-                      +
-                    </button>
+
+                    {!dynamicCreateRecipe.some((i) => i.uid === item.uid) && (
+                      <>
+                        <button
+                          onClick={(e) =>
+                            handleWeight(
+                              e,
+                              item.uid,
+                              Math.round(item.price / 2)
+                            )
+                          }
+                          className="px-3 py-1 bg-green-500 text-white-500 font-bold text-xl cursor-pointer"
+                        >
+                          +
+                        </button>
+                        {parseInt(item.weight) > 500 && (
+                          <button
+                            onClick={(e) =>
+                              handleDecreaseWeight(
+                                e,
+                                item.uid,
+                                Math.round(item.price / 2)
+                              )
+                            }
+                            className="px-2 py-1  bg-red-500 text-white-500 font-bold text-xl cursor-pointer"
+                          >
+                            <RemoveIcon
+                              style={{ fontSize: "24px", width: "16px" }}
+                            />
+                          </button>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -97,7 +144,7 @@ export const More = () => {
               <div className="flex justify-between mt-2 items-center">
                 <p>
                   <CurrencyRupeeRoundedIcon className="text-green-600" />{" "}
-                  {item?.price}
+                  {parseInt(item?.updatedPrice ?? item.price)}
                 </p>
                 <button
                   className={`px-5 py-1 text-white-500 rounded-md ${

@@ -57,6 +57,7 @@ export const remove = async (url, config) => {
 const handleRequestError = (error) => {
   if (error.response) {
     if (error.response.status === 401) {
+      window.location.href = "/login";
       throw new Error("Unauthorized Access. Invalid Credentials.");
     }
     if (error.response.status === 500) {
@@ -64,7 +65,7 @@ const handleRequestError = (error) => {
       throw new Error("Internal Server Error. Please try again later.");
     }
     if (error.response.status === 400) {
-      toast.error(error?.response?.data?.message); 
+      toast.error(error?.response?.data?.message);
       throw new Error(error);
     }
     throw new Error(`Error: ${error}`);

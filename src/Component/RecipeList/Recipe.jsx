@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import {
   addRecipeTocart,
   deleteUserRecipeList,
+  editRecipeItem,
   fetchUserRecipeList,
 } from "../../features/saladSlice";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import ImageComponent from "../Common/ImageComponent";
 import { useEffect, useState } from "react";
 export const Recipe = () => {
@@ -14,7 +17,8 @@ export const Recipe = () => {
   const { loading, loadingRecipe } = useSelector((state) => state.salad);
   const [deleteUid, setDeleteUid] = useState("");
 
-  console.log(recipeList);
+  const { createRecipe } = useSelector((state) => state.salad);
+  console.log(createRecipe);
 
   useEffect(() => {
     if (recipeList.length == 0) {
@@ -43,7 +47,12 @@ export const Recipe = () => {
       </p>
     );
 
+  const handleEditRecipe = (uid) => {
+    dispatch(editRecipeItem(uid));
+  };
+
   return (
+
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 flex flex-col gap-y-4">
       {recipeList.length === 0 && (
         <div className="flex flex-col gap-10 my-20">
@@ -94,7 +103,7 @@ export const Recipe = () => {
               Total Calories: {recipe?.total_calories}Kcal
             </p>
 
-            <div className="flex gap-6 mt-3">
+            <div className="flex gap-4 mt-3  items-center ">
               <button
                 className={`text-sm py-2 text-white-500 text-center px-4 rounded-md ${
                   cartList.some((item) => item.id === recipe.id)
@@ -109,12 +118,17 @@ export const Recipe = () => {
                   : "Add To Cart"}
               </button>
 
-              <button
-                className="text-sm bg-red-600 py-2 text-center px-4 rounded-md text-white-500"
+              <DeleteForeverIcon
+                className="text-sm bg-red-600 p-1 rounded-md cursor-pointer hover:bg-red-500  "
+                style={{ color: "#fff", height: "34px", width: "30px" }}
                 onClick={() => handleRemoveRecipe(recipe.uid)}
-              >
-                {deleteUid === recipe.uid && loadingRecipe ? "..." : "Remove"}
-              </button>
+              />
+
+              {/* <ModeEditOutlineIcon
+                className="text-sm bg-green-500 p-1 rounded-md cursor-pointer hover:bg-green-600  "
+                style={{ color: "#fff", height: "34px", width: "30px" }}
+                onClick={() => handleEditRecipe(recipe.uid)}
+              /> */}
             </div>
           </div>
         </div>
