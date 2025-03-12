@@ -41,7 +41,7 @@ export const ExploreDetail = () => {
   return (
     <div className="px-4 md:px-14 lg:px-24 xl:px-44 my-8">
       <ImageComponent
-        src={details.image}
+        src={details?.image}
         cardCss="w-full md:h-[50vh] h-[40vh] overflow-hidden rounded-xl"
         imgCss=" object-cover rounded-lg  "
       />

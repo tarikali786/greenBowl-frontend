@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import {
   Cart,
+  EditRecipe,
   ExploreDetail,
   Home,
   HomeLayout,
@@ -38,6 +39,7 @@ function App() {
 
           <Route path="exploreSalad" element={<MoreExploreSalad />} />
           <Route path="exploreSalad/:id" element={<ExploreDetail />} />
+          <Route path="edit-recipe/:id" element={<EditRecipe />} />
         </Route>
         <Route path="/profile" element={<ProfileLayout />}>
           <Route index element={<Profile />} />

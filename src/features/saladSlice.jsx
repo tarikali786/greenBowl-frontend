@@ -168,6 +168,8 @@ export const saladSlice = createSlice({
         (item) => item.uid === action.payload
       );
     },
+
+   
   },
   extraReducers: (builder) => {
     builder.addCase(fetchHomePageData.pending, (state) => {

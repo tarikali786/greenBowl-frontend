@@ -52,7 +52,6 @@ export const Recipe = () => {
   };
 
   return (
-
     <div className="px-4 md:px-14 lg:px-32 xl:px-44 py-6 flex flex-col gap-y-4">
       {recipeList.length === 0 && (
         <div className="flex flex-col gap-10 my-20">
@@ -124,11 +123,12 @@ export const Recipe = () => {
                 onClick={() => handleRemoveRecipe(recipe.uid)}
               />
 
-              {/* <ModeEditOutlineIcon
-                className="text-sm bg-green-500 p-1 rounded-md cursor-pointer hover:bg-green-600  "
-                style={{ color: "#fff", height: "34px", width: "30px" }}
-                onClick={() => handleEditRecipe(recipe.uid)}
-              /> */}
+              <Link to={`/edit-recipe/${recipe.uid}`}>
+                <ModeEditOutlineIcon
+                  className="text-sm bg-green-500 p-1 rounded-md cursor-pointer hover:bg-green-600  "
+                  style={{ color: "#fff", height: "34px", width: "30px" }}
+                />
+              </Link>
             </div>
           </div>
         </div>
